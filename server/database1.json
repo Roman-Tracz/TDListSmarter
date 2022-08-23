@@ -1,0 +1,10 @@
+{
+    "buckets": [
+        { "Id":  1, "Name": "Bucket_01", "Description": "Description_01", "Color": "Red"   , "MaxNumOfTasks": 10  },
+        { "Id":  2, "Name": "Bucket_02", "Description": "Description_02", "Color": "Red"   , "MaxNumOfTasks": 11  },
+        { "Id":  3, "Name": "Bucket_03", "Description": "Description_03", "Color": "Blue"  , "MaxNumOfTasks": 12  },
+        { "Id":  4, "Name": "Bucket_04", "Description": "Description_04", "Color": "Blue"  , "MaxNumOfTasks": 13  },
+        { "Id":  5, "Name": "Bucket_04", "Description": "Description_04", "Color": "Blue"  , "MaxNumOfTasks": 14  }
+    ]
+ }
+ 

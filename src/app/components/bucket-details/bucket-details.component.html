@@ -1,0 +1,31 @@
+<p>bucket-details works!</p>
+
+<table>
+    <div *ngFor="let bucket of bucketListI; let col = index">
+        <tr >         
+            <div *ngIf="col<=bucketListI.length-1">
+            <div style="margin:20px">
+              <div style="background-color:{{bucketListI[col].Color}}; height:130px; width:205px;" >  
+                <a href="/bucketDetails?id={{bucketListI[col].Id}}" target="_self">
+                  <h1 align="center">{{bucketListI[col].Name}}</h1>
+                </a>
+                <h3 align="center">To do: {{getTasksByType(bucketListI[col].Id,'To Do')}}{{taskList.length}}</h3>
+                <div *ngIf="bucket.Id" align="right" >
+{{bucketListI[col].Id}}
+                  <button style="background-color:{{bucketListI[col].Color}}; height:30px; width:30px; border:not();" (click)="openModalY('bucket-modal-yesNo3',bucketListI[col].Id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            </div>
+        </tr>
+        </div>
+</table>
+
+<jw-modal id="bucket-modal-yesNo3">
+    {{bucketId1}}, {{bucketId}}, {{bucketList[2].Name}}, {{bucketListI[0].Name}}
+    <h1 style="height:350px">Are you sure to delete bucket {{bucketName}} with all tasks?</h1>
+    <button (click)="delBucket(bucketId);">Yes</button>
+    <button (click)="closeModal('bucket-modal-yesNo3');">No</button>
+  </jw-modal>

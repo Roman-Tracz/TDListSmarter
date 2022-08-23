@@ -1,0 +1,301 @@
+<!----><p>bucket-details-page works!</p>
+taskMaxId={{taskMaxId}},=
+<table style="margin:30px;">
+    <tr>
+        <td>
+            <h1>Bucket {{bucketList[0].Name}}</h1>
+        </td>
+        <td>
+            <button style="height:30px;width:150px;margin:10px" (click)="openModal('bucket-modal-edit');">Edit</button>
+        </td>
+        <td>
+            <button style="height:30px;width:150px;margin:10px" (click)="openModal('bucket-modal-yesNo2');">Delete</button>
+        </td>
+    </tr>
+    <tr>
+        <td><h4>{{bucketList[0].Description}}</h4></td>
+    </tr>
+    <tr>
+        <td>
+            <app-statistics [bucketIdP]=bucketIdG></app-statistics>
+            <br><br>
+        </td>
+        <td colspan="2" align="right" vAlign="top">
+            <div matTooltip="Maximum limit of tasks has been reached" [matTooltipDisabled]="!isToolTipEnabled">
+            <button style="height:30px;width:150px;margin:10px" mat-button [disabled]="!isButtonEnabled" (click)="openModal('task-modal-input');">Add new task</button>
+            </div>
+        </td>
+    </tr>
+</table>
+<table style="margin:30px" >
+    <tr>
+        <td style="margin:10px; background-color:yellow; vertical-align:auto; height:50px;" align="center" >To Do</td><td [width]="40"></td>
+        <td bgcolor="blue"   align="center">In Progress</td><td [width]="40"></td>
+        <td bgcolor="green"  align="center">Done</td><td [width]="40"></td>
+        <td bgcolor="red"    align="center">Cancelled</td><td [width]="40"></td>
+    </tr>
+    <tr>
+        <!--<td>
+            <app-task-list 
+                [bucketIdP]=bucketIdG
+                [bucketType]='"To Do"'>
+            </app-task-list>
+        </td>-->
+        <td bgcolor="yellow" width="200" height="400" valign="top" align="center">
+            <table>
+                <tr align="center" *ngFor="let task of taskList; let col = index">
+                    <td *ngIf="task.State=='To Do'">
+                        <div *ngIf="task.Priority=='High'">
+                            <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:red;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                            <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                                <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Normal'">
+                            <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:blue;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                            <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                                <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Low'">
+                            <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:greenyellow;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                            <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                                <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td><td [width]="40"></td>
+        <!--<td>
+            <app-task-list
+                [bucketIdP]=bucketIdG
+                [bucketType]='"In Progress"'>
+            </app-task-list>
+        </td>-->
+        <td bgcolor="blue"  width="200" height="400" valign="top" align="center">
+            <table>
+                <tr align="center" *ngFor="let task of taskList; let col = index">
+                    <td *ngIf="task.State=='In Progress'">
+                        <div *ngIf="task.Priority=='High'">
+                            <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:red;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                            <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                                <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Normal'">
+                            <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:blue;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                            <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                                <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Low'">
+                            <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:greenyellow;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                            <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                                <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td><td [width]="40"></td>
+        <!--<td>
+            <app-task-list
+                [bucketIdP]=bucketIdG
+                [bucketType]='"Done"'>
+            </app-task-list>
+        </td>-->
+        <td bgcolor="green"  width="200" height="400" valign="top" align="center">
+            <table>
+                <tr align="center" *ngFor="let task of taskList; let col = index">
+                    <td *ngIf="task.State=='Done'">
+                        <div *ngIf="task.Priority=='High'">
+                            <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:red;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Normal'">
+                            <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:blue;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Low'">
+                            <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:greenyellow;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td><td [width]="40"></td>
+        <!--<td>
+            <app-task-list
+                [bucketIdP]=bucketIdG
+                [bucketType]='"Cancelled"'>
+            </app-task-list>
+        </td>-->
+        <td bgcolor="red"  width="200" height="400" valign="top" align="center">
+            <table>
+                <tr align="center" *ngFor="let task of taskList; let col = index">
+                    <td *ngIf="task.State=='Cancelled'">
+                        <div *ngIf="task.Priority=='High'">
+                            <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" class="button-task" style="background-color:red;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Normal'">
+                            <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:blue;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="task.Priority=='Low'">
+                            <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
+                                <mat-icon class="button-task-icon" style="background-color:greenyellow;">arrow_drop_down_circle</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<div *ngFor="let bucket of bucketList; let col = index">bucketList[0].Id={{bucketList[0].Id}}, bucketList[0].Name={{bucketList[0].Name}}</div>
+<div *ngFor="let task of taskList; let col = index">taskList[0].Id={{taskList[0].Id}}, taskList[0].Title={{taskList[0].Title}}</div>
+
+<jw-modal id="bucket-modal-edit" class="modal-dialog">
+    <h1>Edit bucket</h1>
+    <p>Name:</p>
+      <input type="text" [(ngModel)]="bucketNameInput"/>
+    <p>Description:</p>
+      <input type="text" [(ngModel)]="bucketDesrInput"/>
+    <p>Color:</p>
+    <select #colores [(ngModel)]="bucketColrInput">
+        <option default>Brown</option>
+        <option        >Red</option>
+        <option        >Blue</option>
+        <option        >Green</option>
+        <option        >Yellow</option>
+    </select>
+    <p>Maximum number of tasks:</p>
+      <input type="text" [(ngModel)]="bucketMNOTInput"/>
+    <br><br><br>
+    <button (click)="updBucket('bucket-modal-edit');">Save</button>
+    <button (click)="closeModal('bucket-modal-edit');">Cancel</button>
+</jw-modal>
+
+<jw-modal id="bucket-modal-message">
+    <h1 style="height:350px">{{errorMsg}}</h1>
+    <button (click)="closeModal('bucket-modal-message');">Ok</button>
+</jw-modal>
+
+<jw-modal id="task-modal-input">
+    <table>
+        <tr>
+        <td>
+        <h1>New task</h1>
+        </td>
+        <td></td><td></td><td></td>
+        <td><button (click)="closeModal('task-modal-input');">X</button>
+        </td>
+        </tr>
+    </table>
+    <p>Title:</p>
+    <input type="text" [(ngModel)]="taskTitleInput"/>
+    <p>Description:</p>
+    <input type="text" [(ngModel)]="taskDescrInput"/>
+    <p>Priority:</p>
+    
+    <select #priorities (change)="onSelectedP1(priorities.value)" [(ngModel)]="taskPriorInput">
+        <option value = 'Normal' default>Normal</option>
+        <option value = 'High' >High</option>
+        <option value = 'Low'  >Low</option>
+    </select>
+    <p>State:</p>
+    <select #states (change)="onSelectedS1(states.value)" [(ngModel)]="taskStatsInput">
+        <option default>To Do</option>
+        <option        >In Progress</option>
+        <option        >Done</option>
+        <option        >Cancelled</option>
+    </select>
+
+    <!--
+    <div class="form-group row">
+        <div class="col-sm-10">
+          <ng-select 
+             [ngClass]="'ng-select'" 
+             [(ngModel)]="selectedAttributes" 
+             [ngModelOptions]="{standalone: true}" 
+             [options]="sensorTypes"
+             [multiple]="true">
+          </ng-select>
+        </div>
+      </div>
+     -->
+    <p>Assignee:</p>
+      <input type="text" [(ngModel)]="taskAssigInput"/>
+    <br><br><br>
+    <button (click)="addTask('task-modal-input');">Save</button>
+    <button (click)="closeModal('task-modal-input');">Cancel</button>
+</jw-modal>
+
+<jw-modal id="task-modal-edit" class="modal-dialog">
+    <table>
+    <tr>
+    <td>
+    <h1>Edit task</h1>
+    </td>
+    <td></td><td></td><td></td>
+    <td><button (click)="closeModal('task-modal-edit');">X</button>
+    </td>
+    </tr>
+    </table>
+    <p>Title:</p>
+    <input type="text" [(ngModel)]="taskTitleInput"/>
+    <p>Description:</p>
+    <input type="text" [(ngModel)]="taskDescrInput"/>
+    <p>Priority:</p>
+    <select #priorities  [(ngModel)]="taskPriorInput">
+	    <option default>Normal</option>
+		<option >High</option>
+		<option >Low</option>
+	</select>
+    <p>State:</p>
+    <select #states [(ngModel)]="taskStatsInput">
+	    <option default>To Do</option>
+	    <option        >In Progress</option>
+	    <option        >Done</option>
+        <option        >Cancelled</option>
+	</select>
+    <p>Assignee:</p>
+      <input type="text" [(ngModel)]="taskAssigInput"/>
+    <br><br><br>
+    <button (click)="updTask('task-modal-edit');">Save</button>
+    <button (click)="openModal('task-modal-yesNo2');">Delete</button>
+    <button (click)="closeModal('task-modal-edit');">Cancel</button>
+</jw-modal>
+
+<jw-modal id="bucket-modal-yesNo2">
+    <h1 style="height:350px">Are you sure to delete bucket {{bucketList[0].Name}} with all tasks?</h1>
+    <button (click)="delBucket(bucketIdG);;">Yes</button>
+    <button (click)="closeModal('bucket-modal-yesNo2');">No</button>
+</jw-modal>
+
+<jw-modal id="task-modal-yesNo2">
+    <h1 style="height:350px">Are you sure to delete task {{taskTitleInput}} with all tasks?</h1>
+    <button (click)="delTask(taskId);">Yes</button>
+    <button (click)="closeModal('task-modal-yesNo2');">No</button>
+</jw-modal>
+

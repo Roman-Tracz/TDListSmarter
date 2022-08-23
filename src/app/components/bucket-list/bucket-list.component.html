@@ -1,0 +1,96 @@
+<!----><p>bucket-list works!</p>
+<!---->
+<table style="margin:30px" >
+  <tr>
+    <td width="780">
+      <h3>Browse your bucket</h3>
+    </td>
+    <td>
+      <div matTooltip="Maximum limit of buckets has been reached" [matTooltipDisabled]="!isToolTipEnabled">       
+<!--{{bucketList.length}}-->
+        <!--<button style="height:30px;width:150px;margin:10px" mat-button [disabled]="!isButtonEnabled" (click)="openModal('bucket-modal-input')">Add new bucket</button>-->
+        <button style="height:30px;width:150px;margin:10px" (click)="openModal('bucket-modal-input')">Add new bucket</button>
+      </div>
+    </td>
+  </tr>
+</table>
+<!---->bucketsMaxId={{bucketsMaxId}}
+<table >
+  <div *ngFor="let bucket of bucketList; let col = index">
+  <tr >
+    <div *ngIf="col%4==0"> 
+      <td *ngFor="let nums of mealColumnsNum; let colCount = index">
+      <div *ngIf="col+colCount<=bucketList.length-1">
+      <div style="margin:20px">
+        <div style="background-color:{{bucketList[col+colCount].Color}}; height:130px; width:205px;" >  
+          <a href="/bucketDetails?id={{bucketList[col+colCount].Id}}" target="_self">
+            <h1 align="center">{{bucketList[col+colCount].Name}}</h1>
+          </a>
+          <h3 align="center">To do: {{getTasksByType(bucketList[col+colCount].Id,'To Do')}}{{taskList.length}}</h3>
+{{bucket.Id}}, {{bucketList[col+colCount].Id}}
+          <div *ngIf="bucket.Id" align="right" >
+          <!--<div *ngIf="bucketList[col+colCount].Id" align="right" >-->
+            <button style="background-color:{{bucketList[col+colCount].Color}}; height:30px; width:30px;" (click)="openModalY('bucket-modal-yesNo1',bucketList[col+colCount].Id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      </div>
+      </td>
+    </div>
+  </tr>
+  </div>
+</table>
+
+<!--
+<table border="10px">
+  <tr>
+    <td *ngFor="let bucket of bucketList">
+      <a href="/bucketDetails?id={{bucket.Id}}" target="_self"></a>
+      <app-bucket-details
+        [bucketId]=bucket.Id
+        [bucketColor]=bucket.Color 
+        [bucketName]=bucket.Name >
+      </app-bucket-details>
+    </td>
+  </tr>
+</table>
+-->
+
+<!---->
+<jw-modal id="bucket-modal-yesNo1">
+  <h1 style="height:350px">Are you sure to delete bucket {{bucketName}} with all tasks?</h1>
+  <button (click)="delBucket(bucketId);">Yes</button>
+  <button (click)="closeModal('bucket-modal-yesNo1');">No</button>
+</jw-modal>
+
+<jw-modal id="bucket-modal-input">
+    <h1>New bucket</h1>
+    <p>Name:</p>
+      <input type="text" [(ngModel)]="bucketNameInput"/>
+    <p>Description:</p>
+      <input type="text" [(ngModel)]="bucketDesrInput"/>
+    <p>Color:</p>
+    <select #colores (change)="onSelectedS1(colores.value)" [(ngModel)]="bucketColrInput">
+        <option default>Brown</option>
+        <option        >Red</option>
+        <option        >Blue</option>
+        <option        >Green</option>
+        <option        >Yellow</option>
+    </select>
+    <p>Maximum number of tasks:</p>
+      <input type="text" [(ngModel)]="bucketMNOTInput"/>
+    <br><br><br>
+    <button (click)="addBucket('bucket-modal-input');">Save</button>
+    <button (click)="closeModal('bucket-modal-input');">Cancel</button>
+</jw-modal>
+
+<jw-modal id="bucket-modal-message">
+    <h1 style="height:350px">{{errorMsg}}</h1>
+    <button (click)="closeModal('bucket-modal-message');">Ok</button>  
+</jw-modal>
+
+
+
+

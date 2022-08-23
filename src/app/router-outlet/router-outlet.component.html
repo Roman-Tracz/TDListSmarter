@@ -1,0 +1,41 @@
+<!--<p>router-outlet works!</p>-->
+<body>
+    <!--{{route}}-->
+    <div *ngIf="route=='Home' || route==''">
+        <app-welcome></app-welcome>
+        <app-statistics [bucketIdP]=-1></app-statistics>
+        <app-bucket-list></app-bucket-list>
+    </div>
+
+    <div *ngIf="route.substring(1,14)=='bucketDetails'">
+        <!--<app-title 
+            [pageTitle]="'Bucket'">
+        </app-title>
+        -->
+        <app-bucket-details-page></app-bucket-details-page>
+    </div>
+
+    <div *ngIf="route=='/bucketNotFound'">
+        <!--<app-title 
+            [pageTitle]="'Bucket'">
+        </app-title>
+        -->
+        <app-bucket-not-found></app-bucket-not-found>
+    </div>
+
+    <div *ngIf="route=='/bucketHasBeenDeleted'">
+        <!--<app-title 
+            [pageTitle]="'Bucket'">
+        </app-title>
+        -->
+        <app-bucket-has-been-deleted></app-bucket-has-been-deleted>
+    </div>
+
+    <div *ngIf="route!=('Home' && '') else pageNotFound">
+    </div>
+
+    <ng-template #pageNotFound>
+        <app-page-not-found></app-page-not-found>
+    </ng-template>
+  
+</body>

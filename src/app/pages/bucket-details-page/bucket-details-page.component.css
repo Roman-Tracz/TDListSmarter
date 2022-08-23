@@ -1,0 +1,44 @@
+  .modal-dialog {
+    color: chartreuse;
+    /*max-height: calc(100vh - 2000px);
+    //max-width: calc(100vh - 2000px);
+    */
+    height: 1000px;
+  }
+
+  .button-task-with-priority {
+    height:40px;
+    width:160px;
+    margin-top:5px;
+    margin-bottom:5px;
+    margin-left:0px;
+    margin-right:5px;
+  }
+
+  .button-task {
+    height:40px;
+    width:180px;
+    margin-top:5px;
+    margin-bottom:5px;
+    margin-left:5px;
+    margin-right:5px;
+  }
+
+  .button-task-icon {
+    width:30px;
+    margin-top:0px;
+    margin-left:60px;
+    margin-bottom:-10px;
+  }
+
+  .button-raise-priority {
+    height:40px;
+    width:20px;
+    margin:-5px
+  }
+
+  .button-raise-priority-icon {
+    width:20px;
+    margin-top:0px;
+    margin-left:-10px;
+  }

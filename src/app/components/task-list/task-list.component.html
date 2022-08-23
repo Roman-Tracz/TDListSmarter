@@ -1,0 +1,75 @@
+<p>task-list works!</p>
+
+bucketIdP={{bucketIdP}}, taskCount={{taskCount}}
+currentTimeInSeconds={{currentTimeInSeconds}}
+<div *ngIf="bucketType=='To Do'" style="background-color:yellow;height: 200px; width: 200px" >
+    <table border="10px">
+        <tr align="center">{{bucketType}}</tr>
+        <tr>
+            <ul>
+                <div *ngFor="let task of taskList; let col = index">
+                    <li>{{task.Title}}</li>
+                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
+                </div>
+            </ul>
+        </tr>
+    </table>
+</div>
+<div *ngIf="bucketType=='In Progress'" style="background-color:blue;height: 200px; width: 200px" >
+    <table border="10px">
+        <tr align="center">{{bucketType}}</tr>
+        <tr>
+            <ul>
+                <div *ngFor="let task of taskList; let col = index">
+                    <li>{{task.Title}}</li>
+                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
+                </div>
+            </ul>
+        </tr>
+    </table>
+</div>
+<div *ngIf="bucketType=='Done'" style="background-color:green;height: 200px; width: 200px" >
+    <table border="10px">
+        <tr align="center">{{bucketType}}</tr>
+        <tr>
+            <ul>
+                <div *ngFor="let task of taskList; let col = index">
+                    <li>{{task.Title}}</li>
+                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
+                </div>
+            </ul>
+        </tr>
+    </table>
+</div>
+<div *ngIf="bucketType=='Cancelled'" style="background-color:red;height: 200px; width: 200px" >
+    <table border="10px">
+        <tr align="center">{{bucketType}}</tr>
+        <tr>
+            <ul>
+                <div *ngFor="let task of taskList; let col = index">
+                    <li>{{task.Title}}</li>
+                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
+                </div>
+            </ul>
+        </tr>
+    </table>
+</div>
+
+
+<jw-modal id="task-modal-input">
+    <h1>New task</h1>
+    <p>Title:</p>
+      <input type="text" [(ngModel)]="taskTitleInput"/>
+    <p>Description:</p>
+      <input type="text" [(ngModel)]="taskDescrInput"/>
+    <p>Priority:</p>
+      <input type="text" [(ngModel)]="taskPriorInput"/>
+    <p>State:</p>
+      <input type="text" [(ngModel)]="taskStatsInput"/>
+    <p>Assignee:</p>
+      <input type="text" [(ngModel)]="taskAssigInput"/>
+    <br><br><br>
+    <!--<button (click)="addTask('task-modal-input');">Save</button>
+    <button (click)="updBucket('task-modal-input');">Update</button>
+    <button (click)="closeModal('task-modal-input');">Cancel</button>-->
+</jw-modal>

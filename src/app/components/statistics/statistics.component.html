@@ -1,0 +1,32 @@
+<table  style="margin:30px" >
+    <tr align="left"><h3>Statistics:</h3></tr>
+    <tr >
+        <td [width]="15" [height]="15">
+            <img src="../../../assets/dotYellow.jpg" alt="image">
+        </td>
+        <td [width]="100" [height]="15" >
+            <h4>To Do: {{taskCountToDo}}</h4>
+        </td>
+
+        <td [width]="15" [height]="15">
+            <img src="../../../assets/dotBlue.jpg" alt="image">
+        </td>
+        <td [width]="100" [height]="15">
+            <h4>In Progress: {{taskCountInProgress}}</h4>
+        </td>
+
+        <td [width]="15" [height]="15">
+            <img src="../../../assets/dotGreen.jpg" alt="image">
+        </td>
+        <td [width]="100" [height]="15">
+            <h4>Done: {{taskCountDone}}</h4>
+        </td>
+
+        <td [width]="15" [height]="15">
+            <img src="../../../assets/dotRed.jpg" alt="image">
+        </td>
+        <td [width]="100" [height]="15">
+            <h4>Cancelled: {{taskCountCancelled}}</h4>
+        </td>
+    </tr>
+</table>

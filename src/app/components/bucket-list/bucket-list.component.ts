@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Task } from '../../models/task-model';
 import { Bucket } from '../../models/bucket-model';
-//!!import { BucketService } from 'src/app/services/bucket-service';     /*in-memory-data-service*/
-//
-import { BucketService } from 'src/app/services/bucket-json.service';  /*bucket service*/
-import { TaskService } from 'src/app/services/task-service';
 import { ModalService } from '../../modal/bucket/modal.service';
-import { BucketResponse } from 'src/app/models/bucket-response';
-
+import { delay } from 'rxjs';
+/*in-memory-data-service*/
+//import { BucketService } from 'src/app/services/bucket-service';     
+//import { TaskService } from 'src/app/services/task-service';
+/*json-service*/
+import { BucketService } from 'src/app/services/bucket-json.service';  
+import { TaskService } from 'src/app/services/task-json.service';
+//import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-bucket-list',
@@ -19,147 +21,135 @@ import { BucketResponse } from 'src/app/models/bucket-response';
 export class BucketListComponent implements OnInit {
 
   bucketList!: Bucket[];
-  //bucketList!: BucketResponse;
+  bucketListId!: Bucket[];
   bucketListN!: Bucket[];
-  bucketListI!: Bucket[];
-  bucketListS!: Bucket[];
-  bucketCount!: number;
-  bucketNew!: Bucket;
-
   taskList!: Task[];
-  taskCount!: number;
-
   bucketId = 0;
   bucketName = "";
   bucketNameInput = "";
   bucketDesrInput = "";
-  bucketColrInput = "";
+  bucketColrInput = "Brown";
   bucketMNOTInput = 15;
-
   errorMsg = "";
-
-  bucketsMaxId!: number;
-
+  bucketMaxId!: number;
   mealColumnsNum = [0,1,2,3];
-
   isButtonEnabled!: boolean;
   isToolTipEnabled!: boolean;
-/*
-  public listItems: Array<{ text: string, value: number, status: string }> = [
-    { text: 'Small', value: 1, status: "pending" },
-    { text: 'Medium', value: 2, status: "closed" },
-    { text: 'Large', value: 3, status: "open" }
-];
-*/
-public selectedValue = 2;
-
+  bucketsNameIsUnique!: boolean;
+  td = [0,0,0,0,0,0,0,0,0,0];
+   
   constructor(
 
     private bucketService: BucketService,
     private taskService: TaskService,
     private modalService: ModalService,
-    
-  ) {
-    //this.getBuckets().subscribe(data => {
-      //console.log(data);
-    //});
-    //this.getBuckets();
+    //private spinnerService: NgxSpinnerService
+
+  ) {  
+    //this.typeSelected = 'ball-fussion';
    }
 
 
   ngOnInit(): void { 
     
-    this.bucketsMaxId = this.getBucketsMaxId();
+    this.getBucketsNextId();
     this.getBuckets();
-    this.bucketCount = this.bucketList.length;
-    this.getTasksByType(this.bucketId, "To Do");
-    this.taskCount = this.taskList.length;
-    this.bucketColrInput = 'Brown';
-    this.bucketMNOTInput = 15;
-
+    
   }
-  
-  onSelectedS1(value4:string): void {
-    console.log('index', value4);
-    this.bucketColrInput == value4;
+  /*
+  public showSpinner(): void {
+    this.spinnerService.show();
+
+    setTimeout(() => {
+      this.spinnerService.hide();
+    }, 5000); // 5 seconds;
+  }
+  */
+
+  onSelectedS1(value:string): void {
+    this.bucketColrInput == value;
 	}
 
 
   getBuckets(): void {
     this.bucketService.getBuckets()
-      .subscribe(buckets => this.bucketList = buckets
-        .sort((x,y) => x.Id < y.Id ? -1 : 1)
-      );
-console.log('bucketList1',this.bucketList);
-    if(this.bucketList.length >= 10 ){
-      this.isButtonEnabled = false;
-      this.isToolTipEnabled = true;
-    }
-    else{
-      this.isButtonEnabled = true;
-      this.isToolTipEnabled = false;
-    }
+      .subscribe(buckets => { 
+        this.bucketList = buckets.sort((x,y) => x.Id < y.Id ? -1 : 1)
+
+      for (let i = 0; i<= this.bucketList.length-1; i++){
+        this.getTasksByType(this.bucketList[i].Id,'To Do');
+      }
+      
+      if(this.bucketList.length >= 10 ){
+        this.isButtonEnabled = false;
+        this.isToolTipEnabled = true;
+      }
+      else{
+        this.isButtonEnabled = true;
+        this.isToolTipEnabled = false;
+      }
+    });
   }
 
 
-  getBucketById(id: number): void {
+  getBucketById(idBucket: number): void {
     this.bucketService.getBuckets()
-    .subscribe(buckets => this.bucketListI = buckets.filter(item =>
-      item.Id === id
-    ));
-    console.log('bucketList',this.bucketListI);
+      .subscribe(buckets => {
+        this.bucketListId = buckets.filter(item =>
+        item.Id === idBucket)
+
+        this.bucketName = this.bucketListId[0].Name;
+      }
+    );
   }
 
 
-  getBucketsMaxId(): number {
-    //let sorted = this.bucketService.getBucketsMaxId();
-    //return sorted + 1;
-    return this.bucketService.getBucketsMaxId();
+  getBucketsNextId(): void {
+    this.bucketService.getBucketsNextId().subscribe(b => this.bucketMaxId = b);
   }
 
 
-  addBucket(id: string): void {  
+  async addBucket(id: string): Promise<void> {  
     const bucketNew: Bucket = { 
-      Id            : this.bucketsMaxId,
+      Id            : this.bucketMaxId,
       Name          : this.bucketNameInput, 
       Description   : this.bucketDesrInput, 
       Color         : this.bucketColrInput, 
       MaxNumOfTasks : this.bucketMNOTInput, 
     }
 
-    if(this.validateBucket() == true) {
+    if(await this.validateBucket() == true) {
       this.bucketService.addBucket(bucketNew);
-      this.bucketCount++;
-      this.bucketsMaxId++;
       this.modalService.close(id);
     }
 
     this.getBuckets();
+    window.location.reload();
   }
 
 
-  delBucket(id: number): void {  
-      this.bucketService.delBucketById(id);
-      //!!this.taskService.delTaskByIdBucket(id);
-      this.bucketCount--;
+  async delBucket(id: number): Promise<void> {  
+      await this.bucketService.delBucketById(id);
+      await this.delTaskByIdBucket(id);
       this.getBuckets();
       this.closeModal('bucket-modal-yesNo1');
+      window.location.reload();
   }
 
   
-  checkIfBucketsNameIsUnique(bucketName: string): boolean {
+  async checkIfBucketsNameIsUnique(bucketName: string): Promise<void> {
     this.bucketService.getBuckets()
-      .subscribe(buckets => this.bucketListN = buckets
+      .subscribe(buckets => {this.bucketListN = buckets
         .filter(item =>
-          item.Name === bucketName
-      ));
+          item.Name === bucketName)
 
-    if(this.bucketListN.length > 0){
-      return true;
-    }
-    else{
-      return false;
-    }   
+      if(this.bucketListN.length == 0){
+        this.bucketsNameIsUnique = true;
+      }
+      else{
+        this.bucketsNameIsUnique = false;
+      } 
+    });  
   }
 
 
@@ -171,7 +161,6 @@ console.log('bucketList1',this.bucketList);
   openModalY(id: string, id_bucket: number) {
     this.bucketId = id_bucket;
     this.getBucketById(id_bucket);
-    this.bucketName = this.bucketListI[0].Name;
     this.modalService.open(id);
   }
 
@@ -181,7 +170,7 @@ console.log('bucketList1',this.bucketList);
   }
 
 
-  validateBucket(): boolean {   
+  async validateBucket(): Promise<boolean> {   
     if(this.bucketNameInput == null || this.bucketNameInput == ''){
       this.errorMsg = "Please set Name.";
       this.openModal('bucket-modal-message');
@@ -192,7 +181,8 @@ console.log('bucketList1',this.bucketList);
       this.openModal('bucket-modal-message');
       return false;
     }
-    if(this.checkIfBucketsNameIsUnique(this.bucketNameInput) == true){
+    await this.checkIfBucketsNameIsUnique(this.bucketNameInput);
+    if(this.bucketsNameIsUnique == false){
       this.errorMsg = "Name must be unique.";
       this.openModal('bucket-modal-message');
       return false;
@@ -225,14 +215,31 @@ console.log('bucketList1',this.bucketList);
   }
 
 
-  getTasksByType(Id_Bucket: number, source_id: string): void {
+  getTasksByType(Id_Bucket: number, state: string): void { 
     this.taskService.getTasks()
-      .subscribe(tasks => this.taskList = tasks
-        .filter(item =>
-          item.IdBucket === Id_Bucket && 
-          item.State === source_id
-        ));
+      .subscribe(tasks => {
+        this.taskList = tasks
+          .filter(item =>
+            item.IdBucket === Id_Bucket && 
+            item.State === state)
+          
+            this.td[Id_Bucket] = this.taskList.length;
+        });
+  }
+  
 
+  delTaskByIdBucket(idBucket: number): void {
+    this.taskService.getTasks()
+      .subscribe( async tasks => {
+        this.taskList = tasks
+         .filter(item =>
+            item.IdBucket === idBucket)
+      
+        for (let i = 0; i<= this.taskList.length-1; i++){
+          await this.taskService.delTaskById(this.taskList[i].Id);
+          delay(1000);
+        }
+      });
   }
 
 }

@@ -2,16 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { ModalService } from '../../modal/bucket/modal.service';
 import { Bucket } from '../../models/bucket-model';
-//!!import { BucketService } from 'src/app/services/bucket-service';     /*in-memory-data-service*/
-//
-import { BucketService } from 'src/app/services/bucket-json.service';    /*bucket service*/ 
 import { Task } from '../../models/task-model';
-//!!import { TaskService } from 'src/app/services/task-service';     /*in-memory-data-service*/
-//
-import { TaskService } from 'src/app/services/task-json.service'; 
 import { Router } from '@angular/router';
-import  {MatTooltipModule} from '@angular/material/tooltip';
 import { MatListModule } from '@angular/material/list';
+
+import { Users } from '../../models/user-mock'
+import { Priorities } from '../../models/priority-mock';
+import { States } from '../../models/state-mock';
+import { Colores } from '../../models/color-mock';
+
+/*in-memory-data-service*/
+//!!import { BucketService } from 'src/app/services/bucket-service';
+//!!import { TaskService } from 'src/app/services/task-service';
+/*bucket service*/
+import { BucketService } from 'src/app/services/bucket-json.service';
+import { TaskService } from 'src/app/services/task-json.service';     
+import { delay } from 'rxjs';
 
 
 @Component({
@@ -26,44 +32,31 @@ export class BucketDetailsPage implements OnInit {
   bucketIdG = 0;
   taskId = 0;
   taskName = "";
-
   bucketList!: Bucket[];
   bucketListN!: Bucket[];
   taskCount!: number;
   bucketNew!: Bucket;
   taskList!: Task[];
   taskListTmp!: Task[];
-
+  users = Users;
+  priorities = Priorities;
+  states = States;
+  colores = Colores;
   bucketNameInput = "";
   bucketDesrInput = "";
   bucketColrInput = "";
   bucketMNOTInput = 0;
-
   taskTitleInput = "";
   taskDescrInput = "";
-  taskPriorInput = "";
-  taskStatsInput = "";
+  taskPriorInput = Priorities[0];
+  taskStatsInput = States[0];
   taskAssigInput = "";
-
   errorMsg = "";
-
   taskMaxId = 0;
-
   isButtonEnabled!: boolean;
   isToolTipEnabled!: boolean;
-  dateOptionsSelect: any;
-  someSubscription: any;
   link: any;
-
-  public data: { [key: string]: Object }[] = [
-    { Class: 'asc-sort', Type: 'Sort A to Z', Id: '1' },
-    { Class: 'dsc-sort', Type: 'Sort Z to A ', Id: '2' },
-    { Class: 'filter', Type: 'Filter', Id: '3' },
-    { Class: 'clear', Type: 'Clear', Id: '4' }];
-// map the icon column to iconCSS field.
-public fields: Object = { text: 'Type', iconCss: 'Class', value: 'Id' };
-//set the placeholder to DropDownList input
-public text: string = 'Select a format';                                   
+  bucketsNameIsUnique!: boolean;
 
   constructor(
     private activatedRoute : ActivatedRoute,
@@ -71,85 +64,58 @@ public text: string = 'Select a format';
     private taskService: TaskService,
     private modalService: ModalService,
     private router: Router,
-    private matListModule: MatListModule
 
   ) {  } 
 
-  ngOnDestroy() {
-    if (this.someSubscription) {
-      this.someSubscription.unsubscribe();
-    }
-  }
-
   ngOnInit(): void {
     this.bucketIdG = Number(this.activatedRoute.snapshot.queryParams['id']);
-    //this.taskMaxId = this.getTasksMaxId();
+    this.getTaskNextId();
     this.getBucketById(this.bucketIdG);
     this.getTasks(this.bucketIdG);
-    //!!this.taskCount = this.taskList.length;
-    /*
-    this.bucketNameInput = this.bucketList[0].Name;
-    this.bucketDesrInput = this.bucketList[0].Description;
-    this.bucketColrInput = this.bucketList[0].Color;
-    this.bucketMNOTInput = this.bucketList[0].MaxNumOfTasks; 
-    */
-    this.taskPriorInput = 'Normal'
-    this.taskStatsInput = 'To Do'
-
   }
   
-	onSelectedP(value1:string): void {
-    console.log('index', value1);
-    this.taskPriorInput == value1;
+	onSelectedP(value:string): void {
+    this.taskPriorInput == value;
   }
 
-  onSelectedS(value2:string): void {
-    console.log('index', value2);
-    this.taskStatsInput == value2;
+  onSelectedS(value:string): void {
+    this.taskStatsInput == value;
 	}
 
-  onSelectedP1(value3:string): void {
-    console.log('index', value3);
-    this.taskPriorInput == value3;
+  onSelectedP1(value:string): void {
+    this.taskPriorInput == value;
   }
 
-  onSelectedS1(value4:string): void {
-    console.log('index', value4);
-    this.taskStatsInput == value4;
+  onSelectedS1(value:string): void {
+    this.taskStatsInput == value;
 	}
 
   getBucketById(ident: number): void {
-    //*
     this.bucketService.getBuckets()
-      .subscribe(buckets => this.bucketList = buckets
-       .filter(item =>
-          item.Id === ident
-    ));
-    /*/
-    /*
-    this.bucketService.getBucketById(ident)
-      .subscribe(buckets => this.bucketList = buckets
-        //.filter(item =>
-        //  item.Id === ident
-    );
-    //*/
-/*
-console.log('bucketList2',this.bucketList);
-    if(this.bucketList.length == 0){
-      this.link = '/bucketNotFound';
-      this.router.navigateByUrl(this.link);
-    }
-*/  
+      .subscribe(res => {
+        this.bucketList = res
+          .filter(item =>
+            item.Id === ident)
+
+        if(this.bucketList.length == 0){
+          this.link = '/bucketNotFound';
+          this.router.navigateByUrl(this.link);
+        }
+
+        this.bucketNameInput = this.bucketList[0].Name;
+        this.bucketDesrInput = this.bucketList[0].Description;
+        this.bucketColrInput = this.bucketList[0].Color;
+        this.bucketMNOTInput = this.bucketList[0].MaxNumOfTasks; 
+      });
   }
 
 
-  getTasksMaxId(): number {
-    let sorted = this.taskService.getTasksMaxId()
-    return sorted+1;
+  getTaskNextId(): void {
+    this.taskService.getTaskNextId().subscribe(b => this.taskMaxId = b);
   }
 
 
-  updBucket(id: string): void {  
+  async updBucket(id: string): Promise<void> {  
     const bucketNew: Bucket = { 
       Id            : this.bucketIdG, 
       Name          : this.bucketNameInput, 
@@ -158,7 +124,7 @@ console.log('bucketList2',this.bucketList);
       MaxNumOfTasks : this.bucketMNOTInput
     }
 
-    if(this.validateBucket() == true) {
+    if(await this.validateBucket() == true) {
       this.bucketService.updBuckets(this.bucketList[0], bucketNew);
       this.modalService.close(id);
     }
@@ -168,30 +134,44 @@ console.log('bucketList2',this.bucketList);
   }
 
 
-  delBucket(id: number): void {  
-    console.log('id=',id);  
-    this.bucketService.delBucketById(id);
-    this.taskService.delTaskByIdBucket(id);
-    this.closeModal('bucket-modal-yesNo2');
+  delBucket(idBucket: number): void {   
+    this.bucketService.delBucketById(idBucket);
+    this.delTaskByIdBucket(idBucket);
+    this.closeModal('bucket-modal-yesNo');
     this.link = '/bucketHasBeenDeleted';
     this.router.navigateByUrl(this.link);
   }
 
+  delTaskByIdBucket(idBucket: number): void {
+    this.taskService.getTasks()
+      .subscribe( async tasks => {
+        this.taskList = tasks
+         .filter(item =>
+            item.IdBucket === idBucket)
+      
+        for (let i = 0; i<= this.taskList.length-1; i++){
+          await this.taskService.delTaskById(this.taskList[i].Id);
+          delay(1000);
+        }
+      });
+  }
 
-  getCheckBucketsName(bucketName: string): boolean {
+  async getCheckBucketsName(bucketName: string): Promise<void> {
     this.bucketService.getBuckets()
-      .subscribe(buckets => this.bucketListN = buckets
-        .filter(item =>
-          item.Name === bucketName &&
-          item.Id   !== this.bucketIdG
-      ));
-
-    if(this.bucketListN.length > 0){
-      return true;
-    }
-    else{
-      return false;
-    }   
+      .subscribe(buckets => {
+          this.bucketListN = buckets
+          .filter(item =>
+            item.Name === bucketName &&
+            item.Id   !== this.bucketIdG
+          )
+      
+      if(this.bucketListN.length > 0){
+        this.bucketsNameIsUnique = true;
+      }
+      else{
+        this.bucketsNameIsUnique = false;
+      }
+    });     
   }
 
 
@@ -199,33 +179,39 @@ console.log('bucketList2',this.bucketList);
  
     this.taskService.getTasks()
       .subscribe(
-        tasks => this.taskList = tasks
-         .filter(item =>
-            item.IdBucket === idBucket
-          )
-          .sort((x,y) => x.Title < y.Title ? -1 : 1)        //sort by Priority asc
-          .sort((x,y) => x.Priority < y.Priority ? -1 : 1)  //sort by Title asc
-      );
-      console.log('dfsdfs','fdsdsf');
-  
-  //  if(this.taskList.length >= this.bucketList[0].MaxNumOfTasks){
-  //    this.isButtonEnabled = false;
-  //    this.isToolTipEnabled = true;
-  //  }
-  //  else{
-      this.isButtonEnabled = true;
-      this.isToolTipEnabled = false;
-  //  }
-
+        tasks => { 
+          this.taskList = tasks
+            .filter(item =>
+              item.IdBucket === idBucket
+            )
+            .sort((x,y) => x.Title < y.Title ? -1 : 1)        //sort by Priority asc
+            .sort((x,y) => x.Priority < y.Priority ? -1 : 1)  //sort by Title asc
+       
+            if(this.taskList.length >= this.bucketList[0].MaxNumOfTasks){
+              this.isButtonEnabled = false;
+              this.isToolTipEnabled = true;
+            }
+            else{
+              this.isButtonEnabled = true;
+              this.isToolTipEnabled = false;
+            }
+        });
   }
   
 
   getTaskById(ident: number): void {
     this.taskService.getTasks()
-      .subscribe(tasks => this.taskListTmp = tasks
+      .subscribe(tasks => {this.taskListTmp = tasks
         .filter(item =>
-          item.Id === ident
-    ));
+          item.Id === ident)
+
+          this.taskId         = this.taskListTmp[0].Id;
+          this.taskTitleInput = this.taskListTmp[0].Title;
+          this.taskDescrInput = this.taskListTmp[0].Description; 
+          this.taskPriorInput = this.taskListTmp[0].Priority; 
+          this.taskStatsInput = this.taskListTmp[0].State; 
+          this.taskAssigInput = this.taskListTmp[0].Asignee;  
+        });
   }
 
 
@@ -244,9 +230,10 @@ console.log('bucketList2',this.bucketList);
       this.taskService.addTasks(taskNew);
       this.getTasks(this.bucketIdG);
       this.taskCount = this.taskList.length;
-      this.taskMaxId++;
       this.modalService.close(id);
     }
+
+    window.location.reload();
   }
 
   updTask(id: string): void {  
@@ -266,37 +253,21 @@ console.log('bucketList2',this.bucketList);
     }
 
     this.getTasks(this.bucketIdG);
+    window.location.reload();
   }
 
 
   delTask(id: number): void {  
     this.taskService.delTaskById(id);
-    //this.taskService.delTaskByIdBucket(this.bucketIdG);
-    //this.taskService.delTaskByIdBucket(this.bucketIdG);
-    //this.taskService.delTaskByIdBucket(this.bucketIdG);
-    //this.taskService.delTaskByIdBucket(this.bucketIdG);
     this.getTasks(this.bucketIdG);
     this.taskCount = this.taskList.length;
     this.closeModal('task-modal-edit');
-    this.closeModal('task-modal-yesNo2');
-    //window.location.reload();
-    //this.router.navigateByUrl('/bucketDetails', { skipLocationChange: true });
-    //this.router.navigate(['app-statistics']);
-    //this.router.navigateByUrl('/bucketDetails', { skipLocationChange: true }).then(() => {
-    //this.router.navigate(['/bucketDetails']);});
+    this.closeModal('task-modal-yesNo');
+    window.location.reload();
   }
 
   editTaskModal(id: string, taskId: number) {
-
-      this.getTaskById(taskId);  
-
-      this.taskId         = this.taskListTmp[0].Id;
-      this.taskTitleInput = this.taskListTmp[0].Title;
-      this.taskDescrInput = this.taskListTmp[0].Description; 
-      this.taskPriorInput = this.taskListTmp[0].Priority; 
-      this.taskStatsInput = this.taskListTmp[0].State; 
-      this.taskAssigInput = this.taskListTmp[0].Asignee;
-      
+      this.getTaskById(taskId);     
       this.modalService.open(id);
   }
   
@@ -317,7 +288,7 @@ console.log('bucketList2',this.bucketList);
   }
 
 
-  validateBucket(): boolean {   
+  async validateBucket(): Promise<boolean> {   
     if(this.bucketNameInput == null || this.bucketNameInput == ''){
       this.errorMsg = "Please set Name.";
       this.openModal('bucket-modal-message');
@@ -328,7 +299,8 @@ console.log('bucketList2',this.bucketList);
       this.openModal('bucket-modal-message');
       return false;
     }
-    if(this.getCheckBucketsName(this.bucketNameInput) == true){
+    await this.getCheckBucketsName(this.bucketNameInput);
+    if(this.bucketsNameIsUnique == false){
       this.errorMsg = "Name must be unique.";
       this.openModal('bucket-modal-message');
       return false;
@@ -419,14 +391,14 @@ console.log('bucketList2',this.bucketList);
       return this.taskListTmp;
   }
 
-  raiseStatus(idTask: number): void{
-    this.getTaskById(idTask);  
+  async raiseStatus(idTask: number): Promise<void>{
+    await this.getTaskById(idTask);  
 
-    if(this.taskListTmp[0].State == 'To Do'){
-      this.taskStatsInput = 'In Progress';
+    if(this.taskListTmp[0].State == States[0]){
+      this.taskStatsInput = States[1];
     }
-    if(this.taskListTmp[0].State == 'In Progress'){
-      this.taskStatsInput = 'Done';
+    if(this.taskListTmp[0].State == States[1]){
+      this.taskStatsInput = States[2];
     }
 
     const taskNew: Task = { 
@@ -441,6 +413,7 @@ console.log('bucketList2',this.bucketList);
 
     this.taskService.updTask(this.taskListTmp[0], taskNew);
     this.getTasks(this.bucketIdG);
+    window.location.reload();
   };
 
 }

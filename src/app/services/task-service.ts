@@ -37,7 +37,6 @@ export class TaskService {
 
   delTaskByIdBucket(idBucket: number): void {
     TASKS.forEach((element, index)=>{
-      //console.log('index = ', index, element.IdBucket, element.Id) ;
       if(element.IdBucket == idBucket){
         TASKS.splice(index,10);
       }});

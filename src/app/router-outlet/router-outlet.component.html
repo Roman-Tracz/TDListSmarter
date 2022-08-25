@@ -1,4 +1,5 @@
 <!--<p>router-outlet works!</p>-->
+{{route}}
 <body>
     <!--{{route}}-->
     <div *ngIf="route=='Home' || route==''">
@@ -7,7 +8,9 @@
         <app-bucket-list></app-bucket-list>
     </div>
 
-    <div *ngIf="route.substring(1,14)=='bucketDetails'">
+    <!--<
+        div *ngIf="route.substring(1,14)=='bucketDetails'">-->
+    <div *ngIf="route=='/bucketDetails'">
         <!--<app-title 
             [pageTitle]="'Bucket'">
         </app-title>

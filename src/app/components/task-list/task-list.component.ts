@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Task } from '../../models/task-model';
-//!!import { TaskService } from 'src/app/services/task-service';
-import { TaskService } from 'src/app/services/task-json.service';    /*bucket service*/
 import { ModalService } from '../../modal/bucket/modal.service';
+/*in-memory-data-service*/
+//!!import { TaskService } from 'src/app/services/task-service';
+/*json-service*/
+import { TaskService } from 'src/app/services/task-json.service';
 
 @Component({
   selector: 'app-task-list',

@@ -1,5 +1,5 @@
-<!----><p>bucket-details-page works!</p>
-taskMaxId={{taskMaxId}},=
+<!--<p>bucket-details-page works!</p>-->
+{{taskMaxId}}
 <table style="margin:30px;">
     <tr>
         <td>
@@ -9,7 +9,7 @@ taskMaxId={{taskMaxId}},=
             <button style="height:30px;width:150px;margin:10px" (click)="openModal('bucket-modal-edit');">Edit</button>
         </td>
         <td>
-            <button style="height:30px;width:150px;margin:10px" (click)="openModal('bucket-modal-yesNo2');">Delete</button>
+            <button style="height:30px;width:150px;margin:10px" (click)="openModal('bucket-modal-yesNo');">Delete</button>
         </td>
     </tr>
     <tr>
@@ -172,9 +172,6 @@ taskMaxId={{taskMaxId}},=
     </tr>
 </table>
 
-<div *ngFor="let bucket of bucketList; let col = index">bucketList[0].Id={{bucketList[0].Id}}, bucketList[0].Name={{bucketList[0].Name}}</div>
-<div *ngFor="let task of taskList; let col = index">taskList[0].Id={{taskList[0].Id}}, taskList[0].Title={{taskList[0].Title}}</div>
-
 <jw-modal id="bucket-modal-edit" class="modal-dialog">
     <h1>Edit bucket</h1>
     <p>Name:</p>
@@ -182,12 +179,8 @@ taskMaxId={{taskMaxId}},=
     <p>Description:</p>
       <input type="text" [(ngModel)]="bucketDesrInput"/>
     <p>Color:</p>
-    <select #colores [(ngModel)]="bucketColrInput">
-        <option default>Brown</option>
-        <option        >Red</option>
-        <option        >Blue</option>
-        <option        >Green</option>
-        <option        >Yellow</option>
+    <select #coloresOpt [(ngModel)]="bucketColrInput">
+        <option *ngFor="let color of colores" [value]="color" [selected]="color === colores[0]">{{color}}</option>
     </select>
     <p>Maximum number of tasks:</p>
       <input type="text" [(ngModel)]="bucketMNOTInput"/>
@@ -204,12 +197,11 @@ taskMaxId={{taskMaxId}},=
 <jw-modal id="task-modal-input">
     <table>
         <tr>
-        <td>
-        <h1>New task</h1>
-        </td>
-        <td></td><td></td><td></td>
-        <td><button (click)="closeModal('task-modal-input');">X</button>
-        </td>
+            <td><h1>New task</h1>
+            </td>
+            <td></td><td></td><td></td>
+            <td><button (click)="closeModal('task-modal-input');">X</button>
+            </td>
         </tr>
     </table>
     <p>Title:</p>
@@ -217,35 +209,15 @@ taskMaxId={{taskMaxId}},=
     <p>Description:</p>
     <input type="text" [(ngModel)]="taskDescrInput"/>
     <p>Priority:</p>
-    
-    <select #priorities (change)="onSelectedP1(priorities.value)" [(ngModel)]="taskPriorInput">
-        <option value = 'Normal' default>Normal</option>
-        <option value = 'High' >High</option>
-        <option value = 'Low'  >Low</option>
+    <select #prioritiesOpt1 (change)="onSelectedP1(prioritiesOpt1.value)" [(ngModel)]="taskPriorInput">
+        <option *ngFor="let priority of priorities" [value]="priority" [selected]="priority === priorities[0]">{{priority}}</option>
     </select>
     <p>State:</p>
-    <select #states (change)="onSelectedS1(states.value)" [(ngModel)]="taskStatsInput">
-        <option default>To Do</option>
-        <option        >In Progress</option>
-        <option        >Done</option>
-        <option        >Cancelled</option>
+    <select #statesOpt1 (change)="onSelectedS1(statesOpt1.value)" [(ngModel)]="taskStatsInput" [value]='states[0]'>
+        <option *ngFor="let state of states" [value]="state" [selected]="state === states[0]">{{state}}</option>
     </select>
-
-    <!--
-    <div class="form-group row">
-        <div class="col-sm-10">
-          <ng-select 
-             [ngClass]="'ng-select'" 
-             [(ngModel)]="selectedAttributes" 
-             [ngModelOptions]="{standalone: true}" 
-             [options]="sensorTypes"
-             [multiple]="true">
-          </ng-select>
-        </div>
-      </div>
-     -->
     <p>Assignee:</p>
-      <input type="text" [(ngModel)]="taskAssigInput"/>
+    <input (click)="openModal('assignee-list')" type="text" [(ngModel)]="taskAssigInput"/>
     <br><br><br>
     <button (click)="addTask('task-modal-input');">Save</button>
     <button (click)="closeModal('task-modal-input');">Cancel</button>
@@ -267,35 +239,40 @@ taskMaxId={{taskMaxId}},=
     <p>Description:</p>
     <input type="text" [(ngModel)]="taskDescrInput"/>
     <p>Priority:</p>
-    <select #priorities  [(ngModel)]="taskPriorInput">
-	    <option default>Normal</option>
-		<option >High</option>
-		<option >Low</option>
-	</select>
+    <select #prioritiesOpt2  [(ngModel)]="taskPriorInput">
+        <option *ngFor="let priority of priorities" [value]="priority">{{priority}}</option>
+    </select>
     <p>State:</p>
-    <select #states [(ngModel)]="taskStatsInput">
-	    <option default>To Do</option>
-	    <option        >In Progress</option>
-	    <option        >Done</option>
-        <option        >Cancelled</option>
+    <select #statesOpt2 [(ngModel)]="taskStatsInput">
+        <option *ngFor="let state of states" [value]="state">{{state}}</option>
 	</select>
     <p>Assignee:</p>
-      <input type="text" [(ngModel)]="taskAssigInput"/>
+    <input (click)="openModal('assignee-list')" type="text" [(ngModel)]="taskAssigInput"/>
     <br><br><br>
     <button (click)="updTask('task-modal-edit');">Save</button>
-    <button (click)="openModal('task-modal-yesNo2');">Delete</button>
+    <button (click)="openModal('task-modal-yesNo');">Delete</button>
     <button (click)="closeModal('task-modal-edit');">Cancel</button>
 </jw-modal>
 
-<jw-modal id="bucket-modal-yesNo2">
+<jw-modal id="bucket-modal-yesNo">
     <h1 style="height:350px">Are you sure to delete bucket {{bucketList[0].Name}} with all tasks?</h1>
     <button (click)="delBucket(bucketIdG);;">Yes</button>
-    <button (click)="closeModal('bucket-modal-yesNo2');">No</button>
+    <button (click)="closeModal('bucket-modal-yesNo');">No</button>
 </jw-modal>
 
-<jw-modal id="task-modal-yesNo2">
-    <h1 style="height:350px">Are you sure to delete task {{taskTitleInput}} with all tasks?</h1>
+<jw-modal id="task-modal-yesNo">
+    <h1 style="height:350px">Are you sure to delete task {{taskTitleInput}}?</h1>
     <button (click)="delTask(taskId);">Yes</button>
-    <button (click)="closeModal('task-modal-yesNo2');">No</button>
+    <button (click)="closeModal('task-modal-yesNo');">No</button>
+</jw-modal>
+
+<jw-modal id="assignee-list">
+    <h1 style="height:250px">Select assignee for task:</h1>
+    <mat-selection-list #shoes [(ngModel)]="taskAssigInput" >
+        <mat-list-option *ngFor="let user of users" [value]="user">
+            {{user}}
+        </mat-list-option>
+    </mat-selection-list>
+    <button (click)="closeModal('assignee-list');">Ok</button>
 </jw-modal>
 

@@ -1,5 +1,6 @@
-<!----><p>bucket-list works!</p>
-<!---->
+
+<app-welcome></app-welcome>
+<app-statistics [bucketIdP]=-1></app-statistics>
 <table style="margin:30px" >
   <tr>
     <td width="780">
@@ -7,14 +8,12 @@
     </td>
     <td>
       <div matTooltip="Maximum limit of buckets has been reached" [matTooltipDisabled]="!isToolTipEnabled">       
-<!--{{bucketList.length}}-->
-        <!--<button style="height:30px;width:150px;margin:10px" mat-button [disabled]="!isButtonEnabled" (click)="openModal('bucket-modal-input')">Add new bucket</button>-->
-        <button style="height:30px;width:150px;margin:10px" (click)="openModal('bucket-modal-input')">Add new bucket</button>
+        <button style="height:30px;width:150px;margin:10px" mat-button [disabled]="!isButtonEnabled" (click)="openModal('bucket-modal-input')">Add new bucket</button>
       </div>
     </td>
   </tr>
 </table>
-<!---->bucketsMaxId={{bucketsMaxId}}
+
 <table >
   <div *ngFor="let bucket of bucketList; let col = index">
   <tr >
@@ -26,10 +25,8 @@
           <a href="/bucketDetails?id={{bucketList[col+colCount].Id}}" target="_self">
             <h1 align="center">{{bucketList[col+colCount].Name}}</h1>
           </a>
-          <h3 align="center">To do: {{getTasksByType(bucketList[col+colCount].Id,'To Do')}}{{taskList.length}}</h3>
-{{bucket.Id}}, {{bucketList[col+colCount].Id}}
+          <h3 align="center">To do: {{td[bucketList[col+colCount].Id]}}</h3>
           <div *ngIf="bucket.Id" align="right" >
-          <!--<div *ngIf="bucketList[col+colCount].Id" align="right" >-->
             <button style="background-color:{{bucketList[col+colCount].Color}}; height:30px; width:30px;" (click)="openModalY('bucket-modal-yesNo1',bucketList[col+colCount].Id)">
               <mat-icon>delete</mat-icon>
             </button>
@@ -58,7 +55,7 @@
 </table>
 -->
 
-<!---->
+
 <jw-modal id="bucket-modal-yesNo1">
   <h1 style="height:350px">Are you sure to delete bucket {{bucketName}} with all tasks?</h1>
   <button (click)="delBucket(bucketId);">Yes</button>
@@ -73,7 +70,7 @@
       <input type="text" [(ngModel)]="bucketDesrInput"/>
     <p>Color:</p>
     <select #colores (change)="onSelectedS1(colores.value)" [(ngModel)]="bucketColrInput">
-        <option default>Brown</option>
+        <option style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg');" default>Brown</option>
         <option        >Red</option>
         <option        >Blue</option>
         <option        >Green</option>

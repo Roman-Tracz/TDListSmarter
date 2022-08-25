@@ -17,16 +17,14 @@ import { ModalComponent } from './modal/bucket/modal.component';
 
 import { FormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
-
-//import MatList
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatSelectModule} from '@angular/material/select';
+import { MatIconModule} from '@angular/material/icon';
+import { MatTooltipModule} from '@angular/material/tooltip';
 import { BucketNotFoundComponent } from './pages/bucket-not-found/bucket-not-found.component';
 import { BucketHasBeenDeletedComponent } from './pages/bucket-has-been-deleted/bucket-has-been-deleted.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-//import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -43,8 +41,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     BucketNotFoundComponent,
     BucketHasBeenDeletedComponent,
     PageNotFoundComponent,
-    //MatListModule
-    //HttpClient
     
   ],
   imports: [
@@ -59,7 +55,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     MatTooltipModule,
     MatIconModule,
     MatListModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

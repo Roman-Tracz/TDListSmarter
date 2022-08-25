@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { catchError, Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable } from 'rxjs';
 import { Bucket } from '../models/bucket-model';
-import { BUCKETS } from '../models/bucket-mock';
-import { BucketResponse } from '../models/bucket-response';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class BucketService {
 
-  //jsonFile = 'assets/json/buckets.json';
+  //!!jsonFile = 'assets/json/buckets.json';
   jsonFile = 'http://localhost:3000/buckets';
-  //headers = { 'Content-Type': 'application/json' };
   
-  //bucketList!: Bucket[];
   bucketSorted!: Bucket[]; 
   
   constructor(
@@ -54,22 +51,17 @@ export class BucketService {
     this.httpClient.delete<Bucket>(url, { headers }).subscribe();
   }
 
-  getBucketsMaxId(): number {
-    //let bucketSorted = BUCKETS;
-    let bucketSorted1 = 
-    this.httpClient.get<Bucket[]>(this.jsonFile).subscribe();
-    //.subscribe(buckets => this.bucketSorted = buckets
-    //  .sort((x,y) => x.Id < y.Id ? -1 : 1)
-    //);
-    //const sorted = bucketSorted.sort((a,b) => b.Id - a.Id);
-    //console.log('this.bucketSorted[0].Id', this.bucketSorted);
-    //return 1;//Number(this.bucketSorted[0].Id) + 1;
-
-    let buckets = this.httpClient.get<Bucket[]>(this.jsonFile,{responseType: 'json'}).subscribe();
-
-    console.log('this.bucketSorted[0].Id', buckets);
-
-    return 1;
+  getBucketsNextId(): Observable<number> {
+    return this.httpClient.get<Bucket[]>(this.jsonFile)
+    .pipe( map( 
+      (buckets: Bucket[]) => { 
+        const sortedBuckets = buckets.sort((x,y) => x.Id > y.Id ? -1 : 1);
+        console.log('',sortedBuckets);
+        return Number(sortedBuckets[0].Id) + 1;
+      }
+    ));
   }
+
+
 
 }

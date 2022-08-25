@@ -9,19 +9,14 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 
 const routes: Routes = [
 
-  //{ path: ''                    , redirectTo: '', pathMatch: 'full' },
-  { path: '', component: BucketListComponent },
+  { path: '',                     component: BucketListComponent },
   { path: 'bucketDetails'       , component: BucketDetailsPage },
   { path: 'bucketDetails/:id'   , component: BucketDetailsPage },
   { path: 'bucketDetails?:id'   , component: BucketDetailsPage },
   { path: 'bucketNotFound'      , component: BucketNotFoundComponent },
   { path: 'bucketHasBeenDeleted', component: BucketHasBeenDeletedComponent },
-  //{ path: '**'                  , component: PageNotFoundComponent },
-  //{ path: '404'                 , component: PageNotFoundComponent },
-  //{ path: '**', redirectTo: '404' },
-  //{ path: '**', pathMatch: 'full', component: PageNotFoundComponent }
-  { path: '**',  component: PageNotFoundComponent }
-
+  { path: '**'                  , component: PageNotFoundComponent },
+  { path: '404'                 , component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -33,6 +28,5 @@ const routes: Routes = [
 export class AppRoutingModule { }
 
 export const routingComponents = [
-  //BucketDetailsPage,
-  //BucketNotFoundComponent,
+
 ]

@@ -3,6 +3,7 @@ import { Task } from '../../models/task-model';
 import { Bucket } from '../../models/bucket-model';
 import { ModalService } from '../../modal/bucket/modal.service';
 import { delay } from 'rxjs';
+import { Colores } from '../../models/color-mock';
 /*in-memory-data-service*/
 //import { BucketService } from 'src/app/services/bucket-service';     
 //import { TaskService } from 'src/app/services/task-service';
@@ -25,10 +26,11 @@ export class BucketListComponent implements OnInit {
   bucketListN!: Bucket[];
   taskList!: Task[];
   bucketId = 0;
+  colores = Colores;
   bucketName = "";
   bucketNameInput = "";
   bucketDesrInput = "";
-  bucketColrInput = "Brown";
+  bucketColrInput = Colores[0];
   bucketMNOTInput = 15;
   errorMsg = "";
   bucketMaxId!: number;
@@ -132,7 +134,7 @@ export class BucketListComponent implements OnInit {
       await this.bucketService.delBucketById(id);
       await this.delTaskByIdBucket(id);
       this.getBuckets();
-      this.closeModal('bucket-modal-yesNo1');
+      this.closeModal('bucket-modal-yesNo-list');
       window.location.reload();
   }
 
@@ -237,7 +239,7 @@ export class BucketListComponent implements OnInit {
       
         for (let i = 0; i<= this.taskList.length-1; i++){
           await this.taskService.delTaskById(this.taskList[i].Id);
-          delay(1000);
+          delay(5000);
         }
       });
   }

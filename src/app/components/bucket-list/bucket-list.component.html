@@ -16,50 +16,53 @@
 
 <table >
   <div *ngFor="let bucket of bucketList; let col = index">
-  <tr >
-    <div *ngIf="col%4==0"> 
-      <td *ngFor="let nums of mealColumnsNum; let colCount = index">
-      <div *ngIf="col+colCount<=bucketList.length-1">
-      <div style="margin:20px">
-        <div style="background-color:{{bucketList[col+colCount].Color}}; height:130px; width:205px;" >  
-          <a href="/bucketDetails?id={{bucketList[col+colCount].Id}}" target="_self">
-            <h1 align="center">{{bucketList[col+colCount].Name}}</h1>
-          </a>
-          <h3 align="center">To do: {{td[bucketList[col+colCount].Id]}}</h3>
-          <div *ngIf="bucket.Id" align="right" >
-            <button style="background-color:{{bucketList[col+colCount].Color}}; height:30px; width:30px;" (click)="openModalY('bucket-modal-yesNo1',bucketList[col+colCount].Id)">
-              <mat-icon>delete</mat-icon>
-            </button>
+    <tr>
+      <div *ngIf="col%4==0"> 
+        <td *ngFor="let nums of mealColumnsNum; let colCount = index">
+          <div *ngIf="col+colCount<=bucketList.length-1">
+          <div style="margin:20px">
+            <div style="background-color:{{bucketList[col+colCount].Color}}; height:130px; width:205px;" >  
+              <a href="/bucketDetails?id={{bucketList[col+colCount].Id}}" target="_self">
+                <h1 align="center">{{bucketList[col+colCount].Name}}</h1>
+              </a>
+              <h3 align="center">To do: {{td[bucketList[col+colCount].Id]}}</h3>
+              <div *ngIf="bucket.Id" align="right" >
+                <button style="background-color:{{bucketList[col+colCount].Color}}; height:30px; width:30px;" (click)="openModalY('bucket-modal-yesNo-list',bucketList[col+colCount].Id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+          </div>
+        </td>
       </div>
-      </div>
-      </td>
-    </div>
-  </tr>
+    </tr>
   </div>
 </table>
 
-<!--
-<table border="10px">
-  <tr>
-    <td *ngFor="let bucket of bucketList">
-      <a href="/bucketDetails?id={{bucket.Id}}" target="_self"></a>
-      <app-bucket-details
-        [bucketId]=bucket.Id
-        [bucketColor]=bucket.Color 
-        [bucketName]=bucket.Name >
-      </app-bucket-details>
-    </td>
-  </tr>
+<!---->
+<table border="5px">
+  <div *ngFor="let bucket of bucketList; let col = index">
+    <tr>
+      <div *ngIf="col%4==0"> 
+        <td *ngFor="let nums of mealColumnsNum; let colCount = index">
+          <app-bucket-details
+            [bucketId]=bucketList[col+colCount].Id
+            [bucketColor]=bucketList[col+colCount].Color 
+            [bucketName]=bucketList[col+colCount].Name >
+          </app-bucket-details>
+        </td>
+      </div>
+    </tr>
+  </div>
 </table>
--->
 
 
-<jw-modal id="bucket-modal-yesNo1">
+
+<jw-modal id="bucket-modal-yesNo-list">
   <h1 style="height:350px">Are you sure to delete bucket {{bucketName}} with all tasks?</h1>
   <button (click)="delBucket(bucketId);">Yes</button>
-  <button (click)="closeModal('bucket-modal-yesNo1');">No</button>
+  <button (click)="closeModal('bucket-modal-yesNo-list');">No</button>
 </jw-modal>
 
 <jw-modal id="bucket-modal-input">
@@ -69,12 +72,8 @@
     <p>Description:</p>
       <input type="text" [(ngModel)]="bucketDesrInput"/>
     <p>Color:</p>
-    <select #colores (change)="onSelectedS1(colores.value)" [(ngModel)]="bucketColrInput">
-        <option style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg');" default>Brown</option>
-        <option        >Red</option>
-        <option        >Blue</option>
-        <option        >Green</option>
-        <option        >Yellow</option>
+    <select #coloresOpt (change)="onSelectedS1(coloresOpt.value)" [(ngModel)]="bucketColrInput">
+      <option *ngFor="let color of colores" [value]="color" [selected]="color === colores[0]">{{color}}</option>
     </select>
     <p>Maximum number of tasks:</p>
       <input type="text" [(ngModel)]="bucketMNOTInput"/>

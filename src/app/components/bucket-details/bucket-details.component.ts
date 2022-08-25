@@ -1,15 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { Task } from '../../models/task-model';
-import { TaskService } from 'src/app/services/task-service'; 
-import { BucketService } from 'src/app/services/bucket-service'; 
-
-import { ModalService } from '../../modal/bucket/modal.service';
 import { Bucket } from '../../models/bucket-model';
-
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-//import { threadId } from 'worker_threads';
+import { States } from '../../models/state-mock';
+import { ModalService } from '../../modal/bucket/modal.service';
+/*in-memory-data-service*/
+//import { BucketService } from 'src/app/services/bucket-service';     
+//import { TaskService } from 'src/app/services/task-service';
+/*json-service*/
+import { BucketService } from 'src/app/services/bucket-json.service';  
+import { TaskService } from 'src/app/services/task-json.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-bucket-details',
@@ -23,12 +23,11 @@ export class BucketDetailsComponent implements OnInit {
   @Input() bucketId = 0;
 
   bucketList!: Bucket[];
-  bucketListI!: Bucket[];
+  bucketListId1!: Bucket[];
   taskList!: Task[];
- 
   taskCount!: number;
-
-  bucketId1 = 100;
+  bucketId1 = 0;
+  td = [0,0,0,0,0,0,0,0,0,0];
 
   constructor(
     private taskService: TaskService,
@@ -37,65 +36,55 @@ export class BucketDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    this.getTasksByType(this.bucketId, "To Do");
-    //this.taskCount = this.taskList.length;
     this.getBucketById(this.bucketId);
-
-    //this.bucketsMaxId = this.getBucketsMaxId();
-    this.getBuckets();
-    //this.bucketCount = this.bucketList.length;
-    //this.getTasksByType(this.bucketId, "To Do");
-    //this.taskCount = this.taskList.length;
-    //this.bucketColrInput = 'Brown';
-    //this.bucketMNOTInput = 15;
+    this.getTasksByType(this.bucketId, States[0]);
     this.bucketId1 = this.bucketId;
-    
-
-
   }
 
-  getBuckets(): void {
-    this.bucketService.getBuckets()
-      .subscribe(buckets => this.bucketList = buckets
-        .sort((x,y) => x.Id < y.Id ? -1 : 1)
-      );
+
+  getTasksByType(Id_Bucket: number, state: string): void { 
+    this.taskService.getTasks()
+      .subscribe(tasks => {
+        this.taskList = tasks
+          .filter(item =>
+            item.IdBucket === Id_Bucket && 
+            item.State === state)
+          
+            this.td[Id_Bucket] = this.taskList.length;
+            this.taskCount = this.taskList.length;
+        });
+  }
+
+
+  delTaskByIdBucket(idBucket: number): void {
+    this.taskService.getTasks()
+      .subscribe( async tasks => {
+        this.taskList = tasks
+         .filter(item =>
+            item.IdBucket === idBucket)
+      
+        for (let i = 0; i<= this.taskList.length-1; i++){
+          await this.taskService.delTaskById(this.taskList[i].Id);
+          delay(1000);
+        }
+      });
+  }
   
-  }
-
 
   getBucketById(Id_Bucket: number): void {
     this.bucketService.getBuckets()
-      .subscribe(buckets => this.bucketListI = buckets
-        .filter(item =>
-          item.Id === Id_Bucket
-      ));
-    
+    .subscribe(buckets => {
+      this.bucketListId1 = buckets.filter(item =>
+      item.Id === Id_Bucket)
+    });
   }
 
 
-  getTasksByType(Id_Bucket: number, source_id: string): void {
-    this.taskService.getTasks()
-      .subscribe(tasks => this.taskList = tasks
-        .filter(item =>
-          item.IdBucket === Id_Bucket && 
-          item.State === source_id
-        ));
-
-  }
-
-
-  delBucket(id: number): void {  
-    this.bucketService.delBucketById(id);
-      this.taskService.delTaskByIdBucket(id);
-      //!!this.bucketCount--;
-      //!!this.getBuckets();
-      this.closeModal('bucket-modal-yesNo3');
-  }
-
-
-  openModal(id: string) {
-    this.modalService.open(id);
+  async delBucket(id: number): Promise<void> {  
+    await this.bucketService.delBucketById(id);
+    await this.delTaskByIdBucket(id);
+    this.closeModal('bucket-modal-yesNo-details');
+    location.reload();
   }
 
 
@@ -105,15 +94,10 @@ export class BucketDetailsComponent implements OnInit {
   }
 
   
-  openModalY(id: string, id_bucket: number) {
-    this.bucketId1 = id_bucket;
-    //this.getBucketById(id_bucket);
-    console.log('id_bucket',id_bucket);
-    console.log('bucketListI',this.bucketListI);
-    //this.bucketName = this.bucketList[id_bucket].Name;
-    //this.bucketName = this.bucketList[id_bucket].Name;
-    //this.bucketName = this.bucketList[0].Name;
-    //this.bucketName = this.bucketListI[0].Name;
+  openModalYN(id: string, id_bucket: number) {
+    this.bucketId = id_bucket;
+    this.getBucketById(id_bucket);
     this.modalService.open(id);
   }
+
 }

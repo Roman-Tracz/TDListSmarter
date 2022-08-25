@@ -6,7 +6,6 @@ import { States } from '../../models/state-mock';
 /*bucket service*/
 import { TaskService } from 'src/app/services/task-json.service';
 
-
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
@@ -17,12 +16,10 @@ export class StatisticsComponent implements OnInit {
   @Input() bucketIdP = 0;
 
   taskList!: Task[];
-
   taskCountToDo       = 0;
   taskCountInProgress = 0;
   taskCountDone       = 0;
   taskCountCancelled  = 0;
-
   states = States;
 
   constructor(

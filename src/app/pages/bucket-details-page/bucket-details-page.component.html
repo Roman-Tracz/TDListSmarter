@@ -34,12 +34,16 @@
         <td bgcolor="red"    align="center">Cancelled</td><td [width]="40"></td>
     </tr>
     <tr>
-        <!--<td>
+        <!--
+        <td>
             <app-task-list 
-                [bucketIdP]=bucketIdG
-                [bucketType]='"To Do"'>
+                [bucketId]=bucketIdG
+                [bucketType]='"To Do"'
+                [bucketColor]='"Yellow"'>
             </app-task-list>
-        </td>-->
+        </td><td [width]="40"></td>
+        -->
+<!---->
         <td bgcolor="yellow" width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
@@ -72,12 +76,17 @@
                 </tr>
             </table>
         </td><td [width]="40"></td>
-        <!--<td>
+
+        <!--
+        <td>
             <app-task-list
-                [bucketIdP]=bucketIdG
-                [bucketType]='"In Progress"'>
+                [bucketId]=bucketIdG
+                [bucketType]='"In Progress"'
+                [bucketColor]='"Blue"'>
             </app-task-list>
-        </td>-->
+        </td><td [width]="40"></td>
+        -->
+<!---->
         <td bgcolor="blue"  width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
@@ -110,12 +119,17 @@
                 </tr>
             </table>
         </td><td [width]="40"></td>
-        <!--<td>
+
+        <!--
+        <td>
             <app-task-list
-                [bucketIdP]=bucketIdG
-                [bucketType]='"Done"'>
+                [bucketId]=bucketIdG
+                [bucketType]='"Done"'
+                [bucketColor]='"Green"'>
             </app-task-list>
-        </td>-->
+        </td><td [width]="40"></td>
+        -->
+<!---->
         <td bgcolor="green"  width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
@@ -139,12 +153,17 @@
                 </tr>
             </table>
         </td><td [width]="40"></td>
-        <!--<td>
+
+        <!--
+            <td>
             <app-task-list
-                [bucketIdP]=bucketIdG
-                [bucketType]='"Cancelled"'>
+                [bucketId]=bucketIdG
+                [bucketType]='"Cancelled"'
+                [bucketColor]='"Red"'>
             </app-task-list>
-        </td>-->
+        </td><td [width]="40"></td>
+        -->
+<!---->
         <td bgcolor="red"  width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
@@ -170,6 +189,7 @@
         </td>
     </tr>
 </table>
+
 
 <jw-modal id="bucket-modal-edit" class="modal-dialog">
     <h1>Edit bucket</h1>

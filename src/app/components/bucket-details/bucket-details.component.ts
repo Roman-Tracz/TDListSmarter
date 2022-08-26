@@ -64,7 +64,7 @@ export class BucketDetailsComponent implements OnInit {
             item.IdBucket === idBucket)
       
         for (let i = 0; i<= this.taskList.length-1; i++){
-          await this.taskService.delTaskById(this.taskList[i].Id);
+          this.taskService.delTaskById(this.taskList[i].Id);
           delay(1000);
         }
       });
@@ -81,8 +81,8 @@ export class BucketDetailsComponent implements OnInit {
 
 
   async delBucket(id: number): Promise<void> {  
-    await this.bucketService.delBucketById(id);
-    await this.delTaskByIdBucket(id);
+    this.bucketService.delBucketById(id);
+    this.delTaskByIdBucket(id);
     this.closeModal('bucket-modal-yesNo-details');
     location.reload();
   }

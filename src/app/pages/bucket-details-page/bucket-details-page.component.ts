@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ModalService } from '../../modal/bucket/modal.service';
 import { Bucket } from '../../models/bucket-model';
 import { Task } from '../../models/task-model';
 import { Router } from '@angular/router';
-import { MatListModule } from '@angular/material/list';
 
 import { Users } from '../../models/user-mock'
 import { Priorities } from '../../models/priority-mock';
@@ -17,7 +16,7 @@ import { Colores } from '../../models/color-mock';
 /*bucket service*/
 import { BucketService } from 'src/app/services/bucket-json.service';
 import { TaskService } from 'src/app/services/task-json.service';     
-import { delay } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -115,7 +114,7 @@ export class BucketDetailsPage implements OnInit {
   }
 
 
-  async updBucket(id: string): Promise<void> {  
+   updBucket(id: string): void {  
     const bucketNew: Bucket = { 
       Id            : this.bucketIdG, 
       Name          : this.bucketNameInput, 
@@ -124,7 +123,7 @@ export class BucketDetailsPage implements OnInit {
       MaxNumOfTasks : this.bucketMNOTInput
     }
 
-    if(await this.validateBucket() == true) {
+    if(this.validateBucket() == true) {
       this.bucketService.updBuckets(this.bucketList[0], bucketNew);
       this.modalService.close(id);
     }
@@ -135,28 +134,28 @@ export class BucketDetailsPage implements OnInit {
 
 
   delBucket(idBucket: number): void {   
-    this.bucketService.delBucketById(idBucket);
     this.delTaskByIdBucket(idBucket);
+    this.bucketService.delBucketById(idBucket);
     this.closeModal('bucket-modal-yesNo');
     this.link = '/bucketHasBeenDeleted';
     this.router.navigateByUrl(this.link);
   }
 
-  delTaskByIdBucket(idBucket: number): void {
+   delTaskByIdBucket(idBucket: number): void {
     this.taskService.getTasks()
-      .subscribe( async tasks => {
+      .subscribe(  tasks => {
         this.taskList = tasks
          .filter(item =>
             item.IdBucket === idBucket)
       
-        for (let i = 0; i<= this.taskList.length-1; i++){
-          await this.taskService.delTaskById(this.taskList[i].Id);
-          delay(1000);
-        }
-      });
+            for (let i = 0; i<= this.taskList.length-1; i++){
+              forkJoin ({i: this.taskService.delTaskById1(this.taskList[i].Id)}).subscribe();
+            }
+    });
+
   }
 
-  async getCheckBucketsName(bucketName: string): Promise<void> {
+   getCheckBucketsName(bucketName: string): void {
     this.bucketService.getBuckets()
       .subscribe(buckets => {
           this.bucketListN = buckets
@@ -176,7 +175,6 @@ export class BucketDetailsPage implements OnInit {
 
 
   getTasks(idBucket: number): void {
- 
     this.taskService.getTasks()
       .subscribe(
         tasks => { 
@@ -288,7 +286,7 @@ export class BucketDetailsPage implements OnInit {
   }
 
 
-  async validateBucket(): Promise<boolean> {   
+   validateBucket(): boolean {   
     if(this.bucketNameInput == null || this.bucketNameInput == ''){
       this.errorMsg = "Please set Name.";
       this.openModal('bucket-modal-message');
@@ -299,7 +297,7 @@ export class BucketDetailsPage implements OnInit {
       this.openModal('bucket-modal-message');
       return false;
     }
-    await this.getCheckBucketsName(this.bucketNameInput);
+     this.getCheckBucketsName(this.bucketNameInput);
     if(this.bucketsNameIsUnique == false){
       this.errorMsg = "Name must be unique.";
       this.openModal('bucket-modal-message');
@@ -391,8 +389,8 @@ export class BucketDetailsPage implements OnInit {
       return this.taskListTmp;
   }
 
-  async raiseStatus(idTask: number): Promise<void>{
-    await this.getTaskById(idTask);  
+   raiseStatus(idTask: number): void{
+     this.getTaskById(idTask);  
 
     if(this.taskListTmp[0].State == States[0]){
       this.taskStatsInput = States[1];

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../../models/task-model';
 import { Bucket } from '../../models/bucket-model';
 import { ModalService } from '../../modal/bucket/modal.service';
-import { delay } from 'rxjs';
+import { delay, forkJoin, Subject, switchMap } from 'rxjs';
 import { Colores } from '../../models/color-mock';
 /*in-memory-data-service*/
 //import { BucketService } from 'src/app/services/bucket-service';     
@@ -119,39 +119,114 @@ export class BucketListComponent implements OnInit {
       Color         : this.bucketColrInput, 
       MaxNumOfTasks : this.bucketMNOTInput, 
     }
-
+console.log('id = ',id);
     if(await this.validateBucket() == true) {
       this.bucketService.addBucket(bucketNew);
       this.modalService.close(id);
     }
 
     this.getBuckets();
-    window.location.reload();
+    //window.location.reload();
   }
 
 
-  async delBucket(id: number): Promise<void> {  
-      await this.bucketService.delBucketById(id);
-      await this.delTaskByIdBucket(id);
+  delBucket(id: number): void {  
+      this.bucketService.delBucketById(id);
+      this.delTaskByIdBucket(id);
       this.getBuckets();
       this.closeModal('bucket-modal-yesNo-list');
       window.location.reload();
   }
 
   
-  async checkIfBucketsNameIsUnique(bucketName: string): Promise<void> {
-    this.bucketService.getBuckets()
+ checkIfBucketsNameIsUnique(bucketName: string): void {
+  /*
+   this.bucketService.getBuckets()
       .subscribe(buckets => {this.bucketListN = buckets
         .filter(item =>
           item.Name === bucketName)
-
+          console.log('this.bucketsNameIsUnique__ = ',this.bucketsNameIsUnique);
       if(this.bucketListN.length == 0){
         this.bucketsNameIsUnique = true;
       }
       else{
         this.bucketsNameIsUnique = false;
       } 
-    });  
+    });
+//*/
+/*
+this.taskService.getTasks()
+.subscribe( async tasks => {
+  this.taskList = tasks
+   .filter(item =>
+      item.IdBucket === 1)
+    
+            forkJoin ({a: this.bucketService.getBuckets()
+              .subscribe(buckets => {this.bucketListN = buckets
+                .filter(item =>
+                  item.Name === bucketName);
+                })
+              }).subscribe();
+});    
+*/
+console.log('buckcheckIfBucketsNameIsUniqueetListN=','checkIfBucketsNameIsUnique');
+console.log('bucketName=',bucketName);
+//this.bucketService.getBuckets() {
+ //this.bucketService.getBuckets().pipe( 
+   //   switchMap( s => { 
+//console.log('s=',s);
+        //return 
+        this.bucketService.getBucketById(1).pipe(
+          
+        )
+        .subscribe(buckets => this.bucketListN = buckets
+        .filter(item =>
+            item.Name === bucketName)//) } )  
+        )
+        //console.log('buckets=',buckets);
+       
+  //)//!!.subscribe(buckets => this.bucketListN = buckets
+  //.subscribe(buckets => this.bucketListN = buckets
+    //console.log('buckets=',buckets);
+    //.filter(item =>
+    //  item.Name === bucketName);
+      
+    //  console.log('buckets=',buckets);
+    //  console.log('this.bucketsNameIsUnique__1 = ',this.bucketsNameIsUnique);
+    /*
+    this.route.params
+    .switchMap((params: Params) => this.service.getHero(+params['id']))
+    .subscribe((hero: Hero) => this.hero = hero);
+      console.log('buckets=',this.bucketListN);
+      */
+      /*
+      if(this.bucketListN.length == 0){
+        this.bucketsNameIsUnique = true;
+      }
+      else{
+        this.bucketsNameIsUnique = false;
+      } 
+      */
+    
+    //);
+
+    //console.log('buckets=',this.bucketListN);
+    //console.log('this.bucketsNameIsUnique__2 = ',this.bucketsNameIsUnique);
+    //console.log('bucketListN=',this.bucketListN);
+    //}
+  /*
+     this.taskService.getTasks()
+      .subscribe( async tasks => {
+        this.taskList = tasks
+         .filter(item =>
+            item.IdBucket === idBucket)
+      
+            for (let i = 0; i<= this.taskList.length-1; i++){
+              forkJoin ({a: this.taskService.delTaskById1(this.taskList[i].Id)}).subscribe();
+            }
+    });
+  */
+
   }
 
 
@@ -183,7 +258,9 @@ export class BucketListComponent implements OnInit {
       this.openModal('bucket-modal-message');
       return false;
     }
+console.log('this.bucketsNameIsUnique1 = ',this.bucketsNameIsUnique);
     await this.checkIfBucketsNameIsUnique(this.bucketNameInput);
+console.log('this.bucketsNameIsUnique2 = ',this.bucketsNameIsUnique);
     if(this.bucketsNameIsUnique == false){
       this.errorMsg = "Name must be unique.";
       this.openModal('bucket-modal-message');
@@ -237,11 +314,10 @@ export class BucketListComponent implements OnInit {
          .filter(item =>
             item.IdBucket === idBucket)
       
-        for (let i = 0; i<= this.taskList.length-1; i++){
-          await this.taskService.delTaskById(this.taskList[i].Id);
-          delay(5000);
-        }
-      });
+            for (let i = 0; i<= this.taskList.length-1; i++){
+              forkJoin ({a: this.taskService.delTaskById1(this.taskList[i].Id)}).subscribe();
+            }
+    });
   }
 
 }

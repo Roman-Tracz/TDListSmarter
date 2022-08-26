@@ -1,7 +1,44 @@
 <p>task-list works!</p>
 
-bucketIdP={{bucketIdP}}, taskCount={{taskCount}}
-currentTimeInSeconds={{currentTimeInSeconds}}
+bucketId={{bucketId}}, bucketColor={{bucketColor}}
+
+    <table style="background-color:{{bucketColor}};" width="200" height="400" valign="top" align="center">
+        <tr align="center" *ngFor="let task of taskList; let col = index">
+            <div *ngFor="let state of states; let col1 = index">
+            <!--<td *ngIf="task.State=='To Do'">-->
+                <td *ngIf="task.State==state" >
+{{task.Id}}
+                <div *ngIf="task.Priority=='High'">
+                    <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit1', task.Id);">{{task.Title}}
+                        <mat-icon class="button-task-icon" style="background-color:red;">arrow_drop_down_circle</mat-icon>
+                    </button>
+                    <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                        <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                    </button>
+                </div>
+                <div *ngIf="task.Priority=='Normal'">
+                    <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit1', task.Id);">{{task.Title}}
+                        <mat-icon class="button-task-icon" style="background-color:blue;">arrow_drop_down_circle</mat-icon>
+                    </button>
+                    <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                        <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                    </button>
+                </div>
+                <div *ngIf="task.Priority=='Low'">      
+                    <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit1', task.Id);">{{task.Title}}
+                        <mat-icon class="button-task-icon" style="background-color:greenyellow;">arrow_drop_down_circle</mat-icon>
+                    </button>
+                    <button class="button-raise-priority" (click)="raiseStatus(task.Id);">
+                        <mat-icon class="button-raise-priority-icon">chevron_right</mat-icon>
+                    </button>
+                </div>
+            </td>
+        </div>
+        </tr>
+    </table>
+
+
+<!--
 <div *ngIf="bucketType=='To Do'" style="background-color:yellow;height: 200px; width: 200px" >
     <table border="10px">
         <tr align="center">{{bucketType}}</tr>
@@ -54,22 +91,38 @@ currentTimeInSeconds={{currentTimeInSeconds}}
         </tr>
     </table>
 </div>
-
-
-<jw-modal id="task-modal-input">
-    <h1>New task</h1>
+-->
+<!---->
+<jw-modal id="task-modal-edit1" class="modal-dialog">
+    taskTitleInput={{taskTitleInput}}
+    <div align="center" *ngFor="let task of this.taskListTmp; let col = index">id={{this.taskListTmp[col].Id}}</div>
+    <table>
+    <tr>
+    <td>
+    <h1>Edit task</h1>
+    </td>
+    <td></td><td></td><td></td>
+    <td><button (click)="closeModal('task-modal-edit1');">X</button>
+    </td>
+    </tr>
+    </table>
     <p>Title:</p>
-      <input type="text" [(ngModel)]="taskTitleInput"/>
+    <input type="text" [(ngModel)]="taskTitleInput"/>
     <p>Description:</p>
-      <input type="text" [(ngModel)]="taskDescrInput"/>
+    <input type="text" [(ngModel)]="taskDescrInput"/>
     <p>Priority:</p>
-      <input type="text" [(ngModel)]="taskPriorInput"/>
+    <select #prioritiesOpt2  [(ngModel)]="taskPriorInput">
+        <option *ngFor="let priority of priorities" [value]="priority">{{priority}}</option>
+    </select>
     <p>State:</p>
-      <input type="text" [(ngModel)]="taskStatsInput"/>
+    <select #statesOpt2 [(ngModel)]="taskStatsInput">
+        <option *ngFor="let state of states" [value]="state">{{state}}</option>
+	</select>
     <p>Assignee:</p>
-      <input type="text" [(ngModel)]="taskAssigInput"/>
+    <input (click)="openModal('assignee-list')" type="text" [(ngModel)]="taskAssigInput"/>
     <br><br><br>
-    <!--<button (click)="addTask('task-modal-input');">Save</button>
-    <button (click)="updBucket('task-modal-input');">Update</button>
-    <button (click)="closeModal('task-modal-input');">Cancel</button>-->
+    <button (click)="updTask('task-modal-edit1');">Save</button>
+    <button (click)="openModal('task-modal-yesNo');">Delete</button>
+    <button (click)="closeModal('task-modal-edit1');">Cancel</button>
 </jw-modal>
+

@@ -18,7 +18,6 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { BucketDetailsComponent } from './components/bucket-details/bucket-details.component';
 import { BucketDetailsPage } from './pages/bucket-details-page/bucket-details-page.component';
 import { RouterModule } from '@angular/router';
-import { RouterOutletComponent } from './router-outlet/router-outlet.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { BucketNotFoundComponent } from './pages/bucket-not-found/bucket-not-found.component';
 import { BucketHasBeenDeletedComponent } from './pages/bucket-has-been-deleted/bucket-has-been-deleted.component';
@@ -35,7 +34,6 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     StatisticsComponent,
     BucketDetailsComponent,
     BucketDetailsPage,
-    RouterOutletComponent,
     TaskListComponent,
     ModalComponent,
     BucketNotFoundComponent,

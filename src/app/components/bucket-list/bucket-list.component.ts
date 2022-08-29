@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../../models/task-model';
 import { Bucket } from '../../models/bucket-model';
 import { ModalService } from '../../modal/bucket/modal.service';
-import { delay, forkJoin, map, Observable, Subject, switchMap } from 'rxjs';
+import { delay, forkJoin } from 'rxjs';
 import { Colores } from '../../models/color-mock';
 import { States } from '../../models/state-mock';
 /*in-memory-data-service*/
@@ -134,7 +134,7 @@ export class BucketListComponent implements OnInit {
 
   delBucket(id: number): void {   
     this.delTaskByIdBucket(id);
-    this.bucketService.delBucketById(id);
+    this.bucketService.deleteBucketById(id);
     this.getBuckets();
     this.closeModal('bucket-modal-yesNo-list');
     window.location.reload();
@@ -184,7 +184,7 @@ export class BucketListComponent implements OnInit {
       this.openModal('bucket-modal-message');
       return false;
     }
-    if(this.bucketNameInput.length >= 100){
+    if(this.bucketNameInput.length > 100){
       this.errorMsg = "Name cannot be longer than 100 chars.";
       this.openModal('bucket-modal-message');
       return false;
@@ -196,7 +196,7 @@ export class BucketListComponent implements OnInit {
       return false;
     } 
 
-    if(this.bucketDesrInput.length >= 500){
+    if(this.bucketDesrInput.length > 500){
       this.errorMsg = "Description cannot be longer than 500 chars.";
       this.openModal('bucket-modal-message');
       return false;
@@ -246,7 +246,7 @@ export class BucketListComponent implements OnInit {
             item.IdBucket === idBucket)
 
             for (let i = 0; i<= this.taskList.length-1; i++){
-              forkJoin ({i: this.taskService.delTaskById1(this.taskList[i].Id)}).subscribe();
+              forkJoin ({i: this.taskService.deleteTaskByIdReturnDeleted(this.taskList[i].Id)}).subscribe();
               //!!await this.delTaskById(this.taskList[i].Id);
               delay(9000);
             }
@@ -258,7 +258,7 @@ export class BucketListComponent implements OnInit {
 
   async delTaskById(id: number) {
     return new Promise((resolve) => { 
-      this.taskService.delTaskById1(id).subscribe( tasks => { this.taskList = tasks
+      this.taskService.deleteTaskByIdReturnDeleted(id).subscribe( tasks => { this.taskList = tasks
       resolve(this.taskList.length)
       })
     })

@@ -124,7 +124,7 @@ export class BucketDetailsPage implements OnInit {
     }
 
     if(this.validateBucket() == true) {
-      this.bucketService.updBuckets(this.bucketList[0], bucketNew);
+      this.bucketService.updateBuckets(this.bucketList[0], bucketNew);
       this.modalService.close(id);
     }
 
@@ -135,7 +135,7 @@ export class BucketDetailsPage implements OnInit {
 
   delBucket(idBucket: number): void {   
     this.delTaskByIdBucket(idBucket);
-    this.bucketService.delBucketById(idBucket);
+    this.bucketService.deleteBucketById(idBucket);
     this.closeModal('bucket-modal-yesNo');
     this.link = '/bucketHasBeenDeleted';
     this.router.navigateByUrl(this.link);
@@ -149,7 +149,7 @@ export class BucketDetailsPage implements OnInit {
             item.IdBucket === idBucket)
       
             for (let i = 0; i<= this.taskList.length-1; i++){
-              forkJoin ({i: this.taskService.delTaskById1(this.taskList[i].Id)}).subscribe();
+              forkJoin ({i: this.taskService.deleteTaskByIdReturnDeleted(this.taskList[i].Id)}).subscribe();
             }
     });
 
@@ -246,7 +246,7 @@ export class BucketDetailsPage implements OnInit {
     }
 
     if(this.validateTask() == true) {
-      this.taskService.updTask(this.taskListTmp[0], taskNew);
+      this.taskService.updateTask(this.taskListTmp[0], taskNew);
       this.modalService.close(id);
     }
 
@@ -256,7 +256,7 @@ export class BucketDetailsPage implements OnInit {
 
 
   delTask(id: number): void {  
-    this.taskService.delTaskById(id);
+    this.taskService.deleteTaskById(id);
     this.getTasks(this.bucketIdG);
     this.taskCount = this.taskList.length;
     this.closeModal('task-modal-edit');
@@ -409,7 +409,7 @@ export class BucketDetailsPage implements OnInit {
       Asignee       : this.taskListTmp[0].Asignee
     }
 
-    this.taskService.updTask(this.taskListTmp[0], taskNew);
+    this.taskService.updateTask(this.taskListTmp[0], taskNew);
     this.getTasks(this.bucketIdG);
     window.location.reload();
   };

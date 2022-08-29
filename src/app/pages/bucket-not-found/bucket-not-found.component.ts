@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,15 +6,12 @@ import { Router } from '@angular/router';
   templateUrl: './bucket-not-found.component.html',
   styleUrls: ['./bucket-not-found.component.css']
 })
-export class BucketNotFoundComponent implements OnInit {
+export class BucketNotFoundComponent {
 
   constructor(
     private router: Router,
   ) 
   { }
-
-  ngOnInit(): void {
-  }
 
   backHome(): void {
     this.router.navigateByUrl('');

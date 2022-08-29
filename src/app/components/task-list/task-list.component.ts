@@ -99,7 +99,7 @@ export class TaskListComponent implements OnInit {
       Asignee       : this.taskListTmp[0].Asignee
     }
 
-    this.taskService.updTask(this.taskListTmp[0], taskNew);
+    this.taskService.updateTask(this.taskListTmp[0], taskNew);
     this.getTasks(this.bucketId);
     window.location.reload();
   };
@@ -173,7 +173,7 @@ export class TaskListComponent implements OnInit {
     }
 
     if(this.validateTask() == true) {
-      this.taskService.updTask(this.taskListTmp[0], taskNew);
+      this.taskService.updateTask(this.taskListTmp[0], taskNew);
       this.modalService.close(id);
     }
 
@@ -223,7 +223,7 @@ export class TaskListComponent implements OnInit {
 
 
   delTask(id: number): void {  
-    this.taskService.delTaskById(id);
+    this.taskService.deleteTaskById(id);
     this.getTasks(this.bucketId);
     this.taskCount = this.taskList.length;
     this.closeModal('task-modal-edit1');

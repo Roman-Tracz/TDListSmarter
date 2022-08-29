@@ -194,22 +194,37 @@
 <jw-modal id="bucket-modal-edit" class="modal-dialog">
     <h1>Edit bucket</h1>
     <p>Name:</p>
-      <input type="text" [(ngModel)]="bucketNameInput"/>
+      <input type="text" [(ngModel)]="bucketNameInput"
+        name="name" class="form-control" required maxlength="100" #name="ngModel"/>
+        <div *ngIf="name.errors?.['required']" style="color:red">
+            Please set Name.
+        </div>
+        <div *ngIf="name.errors?.['maxlength']" style="color:red">
+            Name cannot be longer than 100 char.
+        </div>
     <p>Description:</p>
-      <input type="text" [(ngModel)]="bucketDesrInput"/>
+      <input type="text" [(ngModel)]="bucketDesrInput"
+        name="description" class="form-control" required maxlength="500" #description="ngModel"/>
+        <div *ngIf="description.errors?.['maxlength']" style="color:red">
+            Description cannot be longer than 500 char.
+        </div>
     <p>Color:</p>
     <select #coloresOpt [(ngModel)]="bucketColrInput">
         <option *ngFor="let color of colores" [value]="color" [selected]="color === colores[0]">{{color}}</option>
     </select>
     <p>Maximum number of tasks:</p>
-      <input type="text" [(ngModel)]="bucketMNOTInput"/>
+      <input type="text" [(ngModel)]="bucketMNOTInput"
+        name="maxNoOfTasks" class="form-control" required maxlength="2" #maxNoOfTasks="ngModel"/>
+        <div *ngIf="maxNoOfTasks.errors?.['required']" style="color:red">
+            Please set Maximum number of tasks.
+        </div>
     <br><br><br>
     <button (click)="updBucket('bucket-modal-edit');">Save</button>
     <button (click)="closeModal('bucket-modal-edit');">Cancel</button>
 </jw-modal>
 
 <jw-modal id="bucket-modal-message">
-    <h1 style="height:350px">{{errorMsg}}</h1>
+    <h1 style="height:50px">{{errorMsg}}</h1>
     <button (click)="closeModal('bucket-modal-message');">Ok</button>
 </jw-modal>
 
@@ -224,9 +239,20 @@
         </tr>
     </table>
     <p>Title:</p>
-    <input type="text" [(ngModel)]="taskTitleInput"/>
+    <input type="text" [(ngModel)]="taskTitleInput"
+        name="title" class="form-control" required maxlength="100" #title="ngModel"/>
+        <div *ngIf="title.errors?.['required']" style="color:red">
+            Please set Title.
+        </div>
+        <div *ngIf="title.errors?.['maxlength']" style="color:red">
+            Title cannot be longer than 100 char.
+        </div>
     <p>Description:</p>
-    <input type="text" [(ngModel)]="taskDescrInput"/>
+    <input type="text" [(ngModel)]="taskDescrInput"
+        name="description" class="form-control" required maxlength="500" #description="ngModel"/>
+        <div *ngIf="description.errors?.['maxlength']" style="color:red">
+            Description cannot be longer than 500 char.
+        </div>
     <p>Priority:</p>
     <select #prioritiesOpt1 (change)="onSelectedP1(prioritiesOpt1.value)" [(ngModel)]="taskPriorInput">
         <option *ngFor="let priority of priorities" [value]="priority" [selected]="priority === priorities[0]">{{priority}}</option>
@@ -254,9 +280,20 @@
     </tr>
     </table>
     <p>Title:</p>
-    <input type="text" [(ngModel)]="taskTitleInput"/>
+    <input type="text" [(ngModel)]="taskTitleInput"
+        name="title" class="form-control" required maxlength="100" #title="ngModel"/>
+        <div *ngIf="title.errors?.['required']" style="color:red">
+            Please set Title.
+        </div>
+        <div *ngIf="title.errors?.['maxlength']" style="color:red">
+            Title cannot be longer than 100 char.
+        </div>
     <p>Description:</p>
-    <input type="text" [(ngModel)]="taskDescrInput"/>
+    <input type="text" [(ngModel)]="taskDescrInput"
+        name="description" class="form-control" required maxlength="500" #description="ngModel"/>
+        <div *ngIf="description.errors?.['maxlength']" style="color:red">
+            Description cannot be longer than 500 char.
+        </div>
     <p>Priority:</p>
     <select #prioritiesOpt2  [(ngModel)]="taskPriorInput">
         <option *ngFor="let priority of priorities" [value]="priority">{{priority}}</option>
@@ -274,19 +311,21 @@
 </jw-modal>
 
 <jw-modal id="bucket-modal-yesNo">
-    <h1 style="height:350px">Are you sure to delete bucket {{bucketList[0].Name}} with all tasks?</h1>
-    <button (click)="delBucket(bucketIdG);;">Yes</button>
+    <h1 style="height:50px">Delete bucket</h1>
+    <h4 style="height:50px">Are you sure to delete bucket {{bucketList[0].Name}} with all tasks?</h4>
+    <button (click)="delBucket(bucketIdG);">Yes</button>
     <button (click)="closeModal('bucket-modal-yesNo');">No</button>
 </jw-modal>
 
 <jw-modal id="task-modal-yesNo">
-    <h1 style="height:350px">Are you sure to delete task {{taskTitleInput}}?</h1>
+    <h1 style="height:50px">Delete task</h1>
+    <h4 style="height:50px">Are you sure to delete task {{taskTitleInput}}?</h4>
     <button (click)="delTask(taskId);">Yes</button>
     <button (click)="closeModal('task-modal-yesNo');">No</button>
 </jw-modal>
 
 <jw-modal id="assignee-list">
-    <h1 style="height:250px">Select assignee for task:</h1>
+    <h1 style="height:100px">Select assignee for task:</h1>
     <mat-selection-list #usersOpt [(ngModel)]="taskAssigInput" >
         <mat-list-option *ngFor="let user of users" [value]="user">
             {{user}}

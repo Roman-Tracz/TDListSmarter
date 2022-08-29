@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,14 +6,11 @@ import { Router } from '@angular/router';
   templateUrl: './bucket-has-been-deleted.component.html',
   styleUrls: ['./bucket-has-been-deleted.component.css']
 })
-export class BucketHasBeenDeletedComponent implements OnInit {
+export class BucketHasBeenDeletedComponent {
 
   constructor(
     private router: Router,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   backHome(): void {
     this.router.navigateByUrl('');

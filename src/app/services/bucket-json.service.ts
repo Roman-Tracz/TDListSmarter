@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Bucket } from '../models/bucket-model';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -9,7 +10,7 @@ import { Bucket } from '../models/bucket-model';
 })
 export class BucketService {
 
-  jsonFile = 'http://localhost:3000/buckets';
+  jsonFile = environment.bucketsJsonLink;
   
   bucketSorted!: Bucket[]; 
   
@@ -17,29 +18,29 @@ export class BucketService {
     private httpClient: HttpClient
   ) { }
 
-  public getBuckets(): Observable<Bucket[]> {
+  getBuckets(): Observable<Bucket[]> {
     const url = `${this.jsonFile}`;
     return this.httpClient.get<Bucket[]>(this.jsonFile);
   }
 
-  public getBucketById(idBucket: number): Observable<Bucket[]> {
+  getBucketById(idBucket: number): Observable<Bucket[]> {
     const url = `${this.jsonFile}/${idBucket}`;
     return this.httpClient.get<Bucket[]>(this.jsonFile,{responseType: 'json'});
   }
 
-  public addBucket(bucket: Bucket): void {
+  addBucket(bucket: Bucket): void {
     const headers = { 'Content-Type': 'application/json' };
     const url = `${this.jsonFile}`;
     this.httpClient.post<Bucket>(url, bucket, { headers }).subscribe();
   }
 
-  updBuckets(bucket: Bucket, bucketNew: Bucket): void {
+  updateBuckets(bucket: Bucket, bucketNew: Bucket): void {
     const headers = { 'Content-Type': 'application/json' };
     const url = `${this.jsonFile}/${bucket.Id}`;
     this.httpClient.put<Bucket>(url,bucketNew, { headers }).subscribe();
   }
 
-  delBucketById(idBucket: number): void {
+  deleteBucketById(idBucket: number): void {
     const headers = { 'Content-Type': 'application/json' };
     const url = `${this.jsonFile}/${idBucket}`;
     this.httpClient.delete<Bucket>(url, { headers }).subscribe();

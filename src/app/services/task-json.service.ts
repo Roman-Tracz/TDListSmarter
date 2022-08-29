@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 })
 export class TaskService {
 
-  jsonFile = environment.tasksJsonLink;
+  jsonFile = environment.jsonLink + '/tasks';
   
   constructor(
     private httpClient: HttpClient

@@ -1,9 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Task } from '../../models/task-model';
 import { States } from '../../models/state-mock';
-/*in-memory-data-service*/
-//!!import { TaskService } from 'src/app/services/task-service';
-/*bucket service*/
 import { TaskService } from 'src/app/services/task-json.service';
 
 @Component({

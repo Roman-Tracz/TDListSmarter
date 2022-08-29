@@ -5,13 +5,8 @@ import { ModalService } from '../../modal/bucket/modal.service';
 import { delay, forkJoin } from 'rxjs';
 import { Colores } from '../../models/color-mock';
 import { States } from '../../models/state-mock';
-/*in-memory-data-service*/
-//import { BucketService } from 'src/app/services/bucket-service';     
-//import { TaskService } from 'src/app/services/task-service';
-/*json-service*/
 import { BucketService } from 'src/app/services/bucket-json.service';  
 import { TaskService } from 'src/app/services/task-json.service';
-//import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-bucket-list',
@@ -48,11 +43,8 @@ export class BucketListComponent implements OnInit {
     private bucketService: BucketService,
     private taskService: TaskService,
     private modalService: ModalService
-    //private spinnerService: NgxSpinnerService
 
-  ) {  
-    //this.typeSelected = 'ball-fussion';
-   }
+  ) {  }
 
 
   ngOnInit(): void { 
@@ -61,15 +53,7 @@ export class BucketListComponent implements OnInit {
     this.getBuckets();
     
   }
-  /*
-  public showSpinner(): void {
-    this.spinnerService.show();
 
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 5000); // 5 seconds;
-  }
-  */
 
   onSelectedS1(value:string): void {
     this.bucketColrInput == value;
@@ -247,7 +231,6 @@ export class BucketListComponent implements OnInit {
 
             for (let i = 0; i<= this.taskList.length-1; i++){
               forkJoin ({i: this.taskService.deleteTaskByIdReturnDeleted(this.taskList[i].Id)}).subscribe();
-              //!!await this.delTaskById(this.taskList[i].Id);
               delay(9000);
             }
 
@@ -262,7 +245,6 @@ export class BucketListComponent implements OnInit {
       resolve(this.taskList.length)
       })
     })
-    //!!await this.taskService.delTaskById(id)
   }
 
 }

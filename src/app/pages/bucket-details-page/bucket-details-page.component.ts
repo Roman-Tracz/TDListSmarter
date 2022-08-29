@@ -4,16 +4,10 @@ import { ModalService } from '../../modal/bucket/modal.service';
 import { Bucket } from '../../models/bucket-model';
 import { Task } from '../../models/task-model';
 import { Router } from '@angular/router';
-
 import { Users } from '../../models/user-mock'
 import { Priorities } from '../../models/priority-mock';
 import { States } from '../../models/state-mock';
 import { Colores } from '../../models/color-mock';
-
-/*in-memory-data-service*/
-//!!import { BucketService } from 'src/app/services/bucket-service';
-//!!import { TaskService } from 'src/app/services/task-service';
-/*bucket service*/
 import { BucketService } from 'src/app/services/bucket-json.service';
 import { TaskService } from 'src/app/services/task-json.service';     
 import { forkJoin } from 'rxjs';

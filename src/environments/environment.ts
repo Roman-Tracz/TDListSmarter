@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  bucketsJsonLink: 'http://localhost:3000/buckets',
-  tasksJsonLink: 'http://localhost:3000/tasks'
+  jsonLink: 'http://localhost:3000',
 };
 
 /*

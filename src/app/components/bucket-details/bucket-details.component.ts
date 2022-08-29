@@ -3,10 +3,6 @@ import { Task } from '../../models/task-model';
 import { Bucket } from '../../models/bucket-model';
 import { States } from '../../models/state-mock';
 import { ModalService } from '../../modal/bucket/modal.service';
-/*in-memory-data-service*/
-//import { BucketService } from 'src/app/services/bucket-service';     
-//import { TaskService } from 'src/app/services/task-service';
-/*json-service*/
 import { BucketService } from 'src/app/services/bucket-json.service';  
 import { TaskService } from 'src/app/services/task-json.service';
 import { delay } from 'rxjs';

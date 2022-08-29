@@ -1,8 +1,5 @@
   .modal-dialog {
     color: chartreuse;
-    /*max-height: calc(100vh - 2000px);
-    //max-width: calc(100vh - 2000px);
-    */
     height: 1000px;
   }
 

@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 })
 export class BucketService {
 
-  jsonFile = environment.bucketsJsonLink;
+  jsonFile = environment.jsonLink + '/buckets';
   
   bucketSorted!: Bucket[]; 
   

@@ -41,7 +41,7 @@ export class BucketListComponent implements OnInit {
   isToolTipEnabled!: boolean;
   bucketsNameIsUnique!: boolean;
   td = [0,0,0,0,0,0,0,0,0,0];
-  MAX_NUMBER_OF_BUCKETS = 8;
+  MAX_NUMBER_OF_BUCKETS = 10;
    
   constructor(
 
@@ -109,8 +109,8 @@ export class BucketListComponent implements OnInit {
   }
 
 
-  getBucketsNextId(): void {
-    this.bucketService.getBucketsNextId().subscribe(b => this.bucketMaxId = b);
+  async getBucketsNextId(): Promise<void> {
+    await this.bucketService.getBucketsNextId().subscribe(b => this.bucketMaxId = b);
   }
 
 
@@ -125,24 +125,20 @@ export class BucketListComponent implements OnInit {
 
     if(await this.validateBucket() == true) {
       this.bucketService.addBucket(bucketNew);
+      this.getBuckets();
+      window.location.reload();
       this.modalService.close(id);
     }
-
-    this.getBuckets();
   }
 
 
-  delBucket(id: number): void {  
-      
+  delBucket(id: number): void {   
     this.delTaskByIdBucket(id);
     this.bucketService.delBucketById(id);
     this.getBuckets();
     this.closeModal('bucket-modal-yesNo-list');
-    //window.location.reload();
-    
-    // this.delTaskByIdBucket(idBucket);
-    //this.bucketService.delBucketById(idBucket);
-    //this.closeModal('bucket-modal-yesNo');
+    window.location.reload();
+
   }
 
 
@@ -241,7 +237,6 @@ export class BucketListComponent implements OnInit {
   
 
   async delTaskByIdBucket(idBucket: number) {
-    console.log('','delTaskByIdBucket');
     return new Promise(async (resolve) => { 
 
     this.taskService.getTasks()

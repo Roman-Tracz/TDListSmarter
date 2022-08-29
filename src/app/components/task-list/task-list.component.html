@@ -1,11 +1,10 @@
 <p>task-list works!</p>
 
-bucketId={{bucketId}}, bucketColor={{bucketColor}}
-
-    <table style="background-color:{{bucketColor}};" width="200" height="400" valign="top" align="center">
+bucketId={{bucketId}}
+    <td style="background-color:{{bucketColor}};"  width="200" height="400" valign="top" align="center">
+    <table >
         <tr align="center" *ngFor="let task of taskList; let col = index">
             <div *ngFor="let state of states; let col1 = index">
-            <!--<td *ngIf="task.State=='To Do'">-->
                 <td *ngIf="task.State==state" >
 {{task.Id}}
                 <div *ngIf="task.Priority=='High'">
@@ -37,74 +36,19 @@ bucketId={{bucketId}}, bucketColor={{bucketColor}}
         </tr>
     </table>
 
-
-<!--
-<div *ngIf="bucketType=='To Do'" style="background-color:yellow;height: 200px; width: 200px" >
-    <table border="10px">
-        <tr align="center">{{bucketType}}</tr>
-        <tr>
-            <ul>
-                <div *ngFor="let task of taskList; let col = index">
-                    <li>{{task.Title}}</li>
-                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
-                </div>
-            </ul>
-        </tr>
-    </table>
-</div>
-<div *ngIf="bucketType=='In Progress'" style="background-color:blue;height: 200px; width: 200px" >
-    <table border="10px">
-        <tr align="center">{{bucketType}}</tr>
-        <tr>
-            <ul>
-                <div *ngFor="let task of taskList; let col = index">
-                    <li>{{task.Title}}</li>
-                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
-                </div>
-            </ul>
-        </tr>
-    </table>
-</div>
-<div *ngIf="bucketType=='Done'" style="background-color:green;height: 200px; width: 200px" >
-    <table border="10px">
-        <tr align="center">{{bucketType}}</tr>
-        <tr>
-            <ul>
-                <div *ngFor="let task of taskList; let col = index">
-                    <li>{{task.Title}}</li>
-                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
-                </div>
-            </ul>
-        </tr>
-    </table>
-</div>
-<div *ngIf="bucketType=='Cancelled'" style="background-color:red;height: 200px; width: 200px" >
-    <table border="10px">
-        <tr align="center">{{bucketType}}</tr>
-        <tr>
-            <ul>
-                <div *ngFor="let task of taskList; let col = index">
-                    <li>{{task.Title}}</li>
-                    <button (click)="openModal('task-modal-input');">{{task.Title}}</button>
-                </div>
-            </ul>
-        </tr>
-    </table>
-</div>
--->
 <!---->
 <jw-modal id="task-modal-edit1" class="modal-dialog">
-    taskTitleInput={{taskTitleInput}}
-    <div align="center" *ngFor="let task of this.taskListTmp; let col = index">id={{this.taskListTmp[col].Id}}</div>
+taskTitleInput={{taskTitleInput}}
+<div align="center" *ngFor="let task of this.taskListTmp; let col = index">id={{this.taskListTmp[col].Id}}</div>
     <table>
-    <tr>
-    <td>
-    <h1>Edit task</h1>
-    </td>
-    <td></td><td></td><td></td>
-    <td><button (click)="closeModal('task-modal-edit1');">X</button>
-    </td>
-    </tr>
+        <tr>
+        <td>
+        <h1>Edit task</h1>
+        </td>
+        <td></td><td></td><td></td>
+        <td><button (click)="closeModal('task-modal-edit1');">X</button>
+        </td>
+        </tr>
     </table>
     <p>Title:</p>
     <input type="text" [(ngModel)]="taskTitleInput"/>
@@ -117,12 +61,28 @@ bucketId={{bucketId}}, bucketColor={{bucketColor}}
     <p>State:</p>
     <select #statesOpt2 [(ngModel)]="taskStatsInput">
         <option *ngFor="let state of states" [value]="state">{{state}}</option>
-	</select>
+    </select>
     <p>Assignee:</p>
-    <input (click)="openModal('assignee-list')" type="text" [(ngModel)]="taskAssigInput"/>
+    <input (click)="openModal('assignee-list1')" type="text" [(ngModel)]="taskAssigInput"/>
     <br><br><br>
     <button (click)="updTask('task-modal-edit1');">Save</button>
-    <button (click)="openModal('task-modal-yesNo');">Delete</button>
+    <button (click)="openModal('task-modal-yesNo1');">Delete</button>
     <button (click)="closeModal('task-modal-edit1');">Cancel</button>
+</jw-modal>
+
+<jw-modal id="task-modal-yesNo1">
+    <h1 style="height:350px">Are you sure to delete task {{taskTitleInput}}?</h1>
+    <button (click)="delTask(taskId);">Yes</button>
+    <button (click)="closeModal('task-modal-yesNo1');">No</button>
+</jw-modal>
+
+<jw-modal id="assignee-list1">
+    <h1 style="height:250px">Select assignee for task:</h1>
+    <mat-selection-list #usersOpt [(ngModel)]="taskAssigInput" >
+        <mat-list-option *ngFor="let user of users" [value]="user">
+            {{user}},{{user}}
+        </mat-list-option>
+    </mat-selection-list>
+    <button (click)="closeModal('assignee-list1');">Ok</button>
 </jw-modal>
 

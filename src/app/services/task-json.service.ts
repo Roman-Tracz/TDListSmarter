@@ -41,6 +41,7 @@ export class TaskService {
   delTaskById(idTask: number): void {
     const headers = { 'Content-Type': 'application/json' };
     const url = `${this.jsonFile}/${idTask}`;
+console.log('del = ', url);
     this.httpClient.delete<Task>(url, { headers }).subscribe();
   }
 
@@ -49,6 +50,7 @@ export class TaskService {
     const url = `${this.jsonFile}/${idTask}`;
     let deleted = this.httpClient.get<Task[]>(url);
     this.httpClient.delete<Task>(url, { headers }).subscribe();
+    console.log('del = ', url);
     return deleted;
   }
 

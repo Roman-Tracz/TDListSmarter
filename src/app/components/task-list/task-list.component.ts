@@ -6,10 +6,9 @@ import { ModalService } from '../../modal/bucket/modal.service';
 //!!import { TaskService } from 'src/app/services/task-service';
 /*json-service*/
 import { TaskService } from 'src/app/services/task-json.service';
+import { Users } from '../../models/user-mock'
 import { States } from '../../models/state-mock';
 import { Priorities } from '../../models/priority-mock';
-import { delay, forkJoin, map, Observable, ObservableInput, switchAll, switchMap } from 'rxjs';
-import { TaskResponse } from 'src/app/models/task-response';
 
 @Component({
   selector: 'app-task-list',
@@ -32,6 +31,7 @@ export class TaskListComponent implements OnInit {
   currentTimeInSeconds: any;
   priorities = Priorities;
   states = States;
+  users = Users;
   taskTitleInput = '';
   taskDescrInput = ''; 
   taskPriorInput = ''; 
@@ -40,9 +40,6 @@ export class TaskListComponent implements OnInit {
   isButtonEnabled!: boolean;
   isToolTipEnabled!: boolean;
   errorMsg = "";
-  t!:Task[];
-  t1!:Task;
-  t2!:any
 
   constructor(
     private taskService: TaskService,
@@ -57,83 +54,14 @@ export class TaskListComponent implements OnInit {
 
 
   async editTaskModal(id: string, taskId: number) {
-    //!!
     await this.getTaskById(taskId);
-    //!!
-    //delay(1000000);
-  //console.log('this.taskId=',this.taskId); 
-    //!!
     this.modalService.open(id);
-  //}
-
-  /*
-  //!!this.t2=
- this.taskService.getTasks().pipe( 
-  switchMap( (value , index)  => 
-    { 
-      //!!this.t2 = 
-       return 
-  //!!this.t2 = 
-this.taskService.getTasks()
-      .subscribe(tasks => {this.taskListTmp = tasks
-        //.filter(item =>
-        //  item.Id === id);
-      }
-      )
-    }
-    )
-  ).subscribe(tasks => {
-    this.taskListTmp = tasks
-    console.log('this.taskLi stTmp=',this.taskListTmp)
-  });
-  //}
-*/
-/*  
-this.taskService.getTasks().pipe(
-    //switchMap((users: Task[]) => {
-      switchMap((users) => {
-      // Create and initialize the array
-console.log('users=',users);
- //     const addressArray$: Observable<Task[]>[] = [];
-      // Iterate over 'users' array
- //     users.forEach(user => {
- //       const address$: Observable<Task[]> = 
- const a =  this.taskService.getTasks();
-//        addressArray$.push(address$);
-//console.log('addressArray=',addressArray$);
-//      });
-      // [Observable<Address>, Observable<Address>, ....., Observable<Address>]
-      return forkJoin(a);
-    }
-    )
-  )*/
   }
-/*
-observable$.pipe( switchMap(value => someService.processValue(value)), 
-                  switchMap(someServiceResponse => andYetAnotherService.processAnotherValue(someServiceResponse)), 
-                  switchMap(yetAnotherResponse => veryImportantService.processVeryImportantValue(yetAnotherResponse))
-                ).subscribe(veryImportantResponse => ...)
-*/
-  /*
-  src/app/components/task-list/task-list.component.ts:61:14 - error TS2345: Argument of type '(taskResponse: Task[]) => Subscription' is not assignable to parameter of type '(value: Task[], index: number) => ObservableInput<any>'.
-  Type 'Subscription' is not assignable to type 'ObservableInput<any>'.
 
-61   switchMap( taskResponse => {
-  */
-/*
-this.categoriesService.getCategories().pipe(
-      switchMap((categoriesResponse) => {
-        this.categoryName = categoriesResponse.categories.filter(cat => cat.idCategory === this.mealsInCategoryParam)[0].strCategory;
-        return this.mealsService.listMealsInCategory(this.categoryName);
-        
-      }))
-      .subscribe(mealsResponse => this.mealsList = mealsResponse.meals);
-*/
 
-  async getTaskById(ident: number): Promise<void> {
-    console.log('ident=',ident);
-    /* 
-    await this.taskService.getTasks()
+  async getTaskById(ident: number) {
+    return new Promise((resolve) => {
+    this.taskService.getTasks()
       .subscribe(tasks => {this.taskListTmp = tasks
         .filter(item =>
           item.Id === ident)
@@ -144,100 +72,10 @@ this.categoriesService.getCategories().pipe(
           this.taskPriorInput = this.taskListTmp[0].Priority; 
           this.taskStatsInput = this.taskListTmp[0].State; 
           this.taskAssigInput = this.taskListTmp[0].Asignee;
-console.log('this.taskListTmp[0].Id=',this.taskListTmp[0].Id); 
+
+          resolve(this.taskListTmp);
         });
-//*/
-
-await this.taskService.getTaskById(ident)
-      .subscribe((tasks) => {this.taskListTmp = tasks
-        //.filter(item =>
-          //item.Id === ident)
-/*
-          this.taskId         = this.taskListTmp[0].Id;
-          this.taskTitleInput = this.taskListTmp[0].Title;
-          this.taskDescrInput = this.taskListTmp[0].Description; 
-          this.taskPriorInput = this.taskListTmp[0].Priority; 
-          this.taskStatsInput = this.taskListTmp[0].State; 
-          this.taskAssigInput = this.taskListTmp[0].Asignee;
-
-*/          //console.log('this.taskListTmp[0].Id=',this.taskListTmp[0].Id); 
-        });
-        //console.log('this.taskListTmp[0].Id=',this.taskListTmp[0].Id); 
-
-/*
-let s11: Task[];
-        this.taskService.getTaskById(ident).pipe(
-          switchMap( (s) => {
-console.log('s=',s);
-            const ty: Observable<Task[]>[] = [];
-            //this.taskTitleInput = s[0].Title;
-              //ty = s;
-              //const ty1: Observable<Task[]> = this.taskService.getTaskById(ident);
-              //s.forEach(user => {
-                const ty1: Observable<Task[]> = this.taskService.getTaskById(ident);
-console.log('ty=',ty1);
-                ty.push(ty1);
-                //this.taskTitleInput = s[0].Title;
-                //ty[0].
-console.log('ty1=',ty);
-              return forkJoin(ty);
-          }
-          
-          )
-          
-        )
-        //!!.subscribe()
-        .subscribe(s => {this.taskListTmp1 = s
-    console.log('this.s1=',s);
-    console.log('this.s2=',s[0]);
-    console.log('this.s2=',s[0]);
-    //this.taskTitleInput = this.taskListTmp[0].Title;
-   // s1.forEach{
-     // this.taskTitleInput =
-    //}
-        });
-
-        //his.taskTitleInput = this.taskListTmp1{Id}. . .Title;
-        //this.taskId         = s[0].Id;
-///console.log('a=',a);
-/*
-console.log('this.taskListTmp1[0].Id=',this.taskListTmp1[0].Id);
-            this.taskId         = s.Id;
-            this.taskTitleInput = this.taskListTmp1[0].Title;
-            this.taskDescrInput = this.taskListTmp1[0].Description; 
-            this.taskPriorInput = this.taskListTmp1[0].Priority; 
-            this.taskStatsInput = this.taskListTmp1[0].State; 
-            this.taskAssigInput = this.taskListTmp1[0].Asignee;
-  console.log('this.taskListTmp1[0].Id=',this.taskListTmp1[0].Id); 
-*/
-//});
-//*/
-/*
-    this.taskService.getTasks().pipe(
-      switchMap( (s) => {
-        console.log('s1=',s);
-        console.log('s2=',s[0].Id);
-        
-        this.taskTitleInput = s[0].Title;
-
-        return this.taskService.getTaskById(ident)
-        //this.taskTitleInput = s[0].Title;
-      }
-      //this.taskTitleInput = s[0].Title;
-      )
-      //this.taskTitleInput = s[0].Title;
-    ).subscribe(tasks => {this.taskListTmp = tasks
-      console.log('tasks1=',tasks);
-      //console.log('tasks1=',tasks[0].Id);
-      console.log('tasks2=',this.taskListTmp);
-      //console.log('tasks3=',this.taskListTmp[0]);
-
-      //this.taskTitleInput = this.taskListTmp[0].Title;
     });
-
-    //this.taskTitleInput = this.taskListTmp[0].Title;
-    console.log('this.taskTitleInput=',this.taskTitleInput);  
-*/
   }
   
 
@@ -268,7 +106,6 @@ console.log('this.taskListTmp1[0].Id=',this.taskListTmp1[0].Id);
 
 
   getTasks(idBucket: number): void {
- 
     this.taskService.getTasks()
       .subscribe(
         tasks => { 
@@ -291,8 +128,6 @@ console.log('this.taskListTmp1[0].Id=',this.taskListTmp1[0].Id);
   }
 
 
-
-
   getTasksByType(idBucketK: number, state: string): void {
     if(idBucketK == -1){
       this.taskService.getTasks()
@@ -312,13 +147,11 @@ console.log('this.taskListTmp1[0].Id=',this.taskListTmp1[0].Id);
   }
 
   openModal(id: string) {
-    
     this.taskTitleInput = this.taskList[0].Title;
     this.taskDescrInput = this.taskList[0].Description; 
     this.taskPriorInput = this.taskList[0].Priority; 
     this.taskStatsInput = this.taskList[0].State; 
     this.taskAssigInput = this.taskList[0].Asignee;
-
     this.modalService.open(id);
   }
 
@@ -386,6 +219,16 @@ console.log('this.taskListTmp1[0].Id=',this.taskListTmp1[0].Id);
     }
 
     return true;
+  }
+
+
+  delTask(id: number): void {  
+    this.taskService.delTaskById(id);
+    this.getTasks(this.bucketId);
+    this.taskCount = this.taskList.length;
+    this.closeModal('task-modal-edit1');
+    this.closeModal('task-modal-yesNo1');
+    window.location.reload();
   }
 
 

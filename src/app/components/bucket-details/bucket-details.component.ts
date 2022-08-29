@@ -23,7 +23,7 @@ export class BucketDetailsComponent implements OnInit {
   @Input() bucketId = 0;
 
   bucketList!: Bucket[];
-  bucketListId1!: Bucket[];
+  bucketListId!: Bucket[];
   taskList!: Task[];
   taskCount!: number;
   bucketId1 = 0;
@@ -74,7 +74,7 @@ export class BucketDetailsComponent implements OnInit {
   getBucketById(Id_Bucket: number): void {
     this.bucketService.getBuckets()
     .subscribe(buckets => {
-      this.bucketListId1 = buckets.filter(item =>
+      this.bucketListId = buckets.filter(item =>
       item.Id === Id_Bucket)
     });
   }

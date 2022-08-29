@@ -47,7 +47,7 @@
         <td bgcolor="yellow" width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
-                    <td *ngIf="task.State=='To Do'">
+                    <td *ngIf="task.State==states[0]"> 
                         <div *ngIf="task.Priority=='High'">
                             <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
                                 <mat-icon class="button-task-icon" style="background-color:red;">arrow_drop_down_circle</mat-icon>
@@ -90,7 +90,7 @@
         <td bgcolor="blue"  width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
-                    <td *ngIf="task.State=='In Progress'">
+                    <td *ngIf="task.State==states[1]">
                         <div *ngIf="task.Priority=='High'">
                             <button class="button-task-with-priority" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
                                 <mat-icon class="button-task-icon" style="background-color:red;">arrow_drop_down_circle</mat-icon>
@@ -133,7 +133,7 @@
         <td bgcolor="green"  width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
-                    <td *ngIf="task.State=='Done'">
+                    <td *ngIf="task.State==states[2]">
                         <div *ngIf="task.Priority=='High'">
                             <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
                                 <mat-icon class="button-task-icon" style="background-color:red;">arrow_drop_down_circle</mat-icon>
@@ -155,19 +155,19 @@
         </td><td [width]="40"></td>
 
         <!--
-            <td>
+        <td>
             <app-task-list
                 [bucketId]=bucketIdG
                 [bucketType]='"Cancelled"'
                 [bucketColor]='"Red"'>
             </app-task-list>
         </td><td [width]="40"></td>
-        -->
+       --> 
 <!---->
         <td bgcolor="red"  width="200" height="400" valign="top" align="center">
             <table>
                 <tr align="center" *ngFor="let task of taskList; let col = index">
-                    <td *ngIf="task.State=='Cancelled'">
+                    <td *ngIf="task.State==states[3]">
                         <div *ngIf="task.Priority=='High'">
                             <button class="button-task" (click)="editTaskModal('task-modal-edit', task.Id);">{{task.Title}}
                                 <mat-icon class="button-task-icon" class="button-task" style="background-color:red;">arrow_drop_down_circle</mat-icon>
@@ -287,7 +287,7 @@
 
 <jw-modal id="assignee-list">
     <h1 style="height:250px">Select assignee for task:</h1>
-    <mat-selection-list #shoes [(ngModel)]="taskAssigInput" >
+    <mat-selection-list #usersOpt [(ngModel)]="taskAssigInput" >
         <mat-list-option *ngFor="let user of users" [value]="user">
             {{user}}
         </mat-list-option>

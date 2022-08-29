@@ -4,6 +4,7 @@ import { Bucket } from '../../models/bucket-model';
 import { ModalService } from '../../modal/bucket/modal.service';
 import { delay, forkJoin, map, Observable, Subject, switchMap } from 'rxjs';
 import { Colores } from '../../models/color-mock';
+import { States } from '../../models/state-mock';
 /*in-memory-data-service*/
 //import { BucketService } from 'src/app/services/bucket-service';     
 //import { TaskService } from 'src/app/services/task-service';
@@ -27,6 +28,7 @@ export class BucketListComponent implements OnInit {
   taskList!: Task[];
   bucketId = 0;
   colores = Colores;
+  states = States;
   bucketName = "";
   bucketNameInput = "";
   bucketDesrInput = "";
@@ -39,7 +41,7 @@ export class BucketListComponent implements OnInit {
   isToolTipEnabled!: boolean;
   bucketsNameIsUnique!: boolean;
   td = [0,0,0,0,0,0,0,0,0,0];
-
+  MAX_NUMBER_OF_BUCKETS = 8;
    
   constructor(
 
@@ -80,10 +82,10 @@ export class BucketListComponent implements OnInit {
         this.bucketList = buckets.sort((x,y) => x.Id < y.Id ? -1 : 1)
 
       for (let i = 0; i<= this.bucketList.length-1; i++){
-        this.getTasksByType(this.bucketList[i].Id,'To Do');
+        this.getTasksByType(this.bucketList[i].Id,this.states[0]);
       }
       
-      if(this.bucketList.length >= 10 ){
+      if(this.bucketList.length >= this.MAX_NUMBER_OF_BUCKETS ){
         this.isButtonEnabled = false;
         this.isToolTipEnabled = true;
       }
@@ -131,11 +133,16 @@ export class BucketListComponent implements OnInit {
 
 
   delBucket(id: number): void {  
-  console.log('','delBucket');
-      this.delTaskByIdBucket(id);
-      this.getBuckets();
-      this.closeModal('bucket-modal-yesNo-list');
-      //window.location.reload();
+      
+    this.delTaskByIdBucket(id);
+    this.bucketService.delBucketById(id);
+    this.getBuckets();
+    this.closeModal('bucket-modal-yesNo-list');
+    //window.location.reload();
+    
+    // this.delTaskByIdBucket(idBucket);
+    //this.bucketService.delBucketById(idBucket);
+    //this.closeModal('bucket-modal-yesNo');
   }
 
 
